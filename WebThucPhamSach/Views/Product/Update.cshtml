@@ -1,0 +1,157 @@
+@model Product
+
+@{
+    ViewData["Title"] = "Chỉnh sửa - " + Model.Name;
+}
+
+<!-- ==================== TRANG CẬP NHẬT SẢN PHẨM ==================== -->
+<!-- Breadcrumb điều hướng -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-action="Index" class="text-success text-decoration-none">
+                <i class="bi bi-house-door-fill me-1"></i>Trang chủ
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Chỉnh sửa: @Model.Name</li>
+    </ol>
+</nav>
+
+<!-- Tiêu đề trang -->
+<div class="mb-4">
+    <h2 class="fw-bold text-primary">
+        <i class="bi bi-pencil-square me-2"></i>Chỉnh sửa sản phẩm
+    </h2>
+    <p class="text-muted">Cập nhật thông tin sản phẩm: <strong>@Model.Name</strong></p>
+</div>
+
+<!-- Card chứa Form cập nhật -->
+<div class="card border-0 shadow-lg rounded-3">
+    <div class="card-body p-4 p-md-5">
+
+        <!-- Form cập nhật sản phẩm - enctype để hỗ trợ upload file ảnh mới -->
+        <form asp-action="Update" method="post" enctype="multipart/form-data">
+            <!-- Trường ẩn lưu Id sản phẩm -->
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+                <!-- Cột trái: Thông tin cơ bản -->
+                <div class="col-md-8">
+                    <!-- Trường nhập Tên sản phẩm -->
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold">
+                            <i class="bi bi-tag-fill text-primary me-1"></i>Tên sản phẩm
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control form-control-lg" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Trường nhập Giá sản phẩm -->
+                    <div class="mb-3">
+                        <label asp-for="Price" class="form-label fw-semibold">
+                            <i class="bi bi-currency-exchange text-primary me-1"></i>Giá (VNĐ)
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Price" class="form-control form-control-lg"
+                               type="number" min="1000" max="10000000" step="1000" />
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Dropdown chọn Danh mục -->
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label fw-semibold">
+                            <i class="bi bi-folder-fill text-primary me-1"></i>Danh mục
+                        </label>
+                        <select asp-for="CategoryId" asp-items="@ViewBag.Categories"
+                                class="form-select form-select-lg">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Trường nhập Mô tả -->
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            <i class="bi bi-text-paragraph text-primary me-1"></i>Mô tả
+                        </label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Ảnh hiện tại và Upload ảnh mới -->
+                <div class="col-md-4">
+                    <!-- Hiển thị ảnh hiện tại của sản phẩm -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-image-fill text-primary me-1"></i>Ảnh hiện tại
+                        </label>
+                        <div class="text-center border rounded-3 p-3 bg-light">
+                            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                            {
+                                <img src="~/images/@Model.ImageUrl"
+                                     class="img-fluid rounded-3"
+                                     alt="@Model.Name"
+                                     style="max-height: 200px;" />
+                            }
+                            else
+                            {
+                                <div class="text-muted py-4">
+                                    <i class="bi bi-image display-4"></i>
+                                    <p class="mb-0 mt-2">Chưa có ảnh</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Input chọn file ảnh mới -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-cloud-arrow-up-fill text-primary me-1"></i>Thay đổi ảnh
+                        </label>
+                        <input type="file" name="imageFile" id="imageFile"
+                               class="form-control" accept="image/*"
+                               onchange="previewNewImage(event)" />
+                        <small class="text-muted">Để trống nếu muốn giữ ảnh cũ</small>
+                    </div>
+
+                    <!-- Xem trước ảnh mới đã chọn -->
+                    <img id="newImagePreview" class="img-fluid rounded-3"
+                         style="display:none; max-height: 200px;" alt="Ảnh mới" />
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <!-- Các nút hành động -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-check-lg me-1"></i> Lưu thay đổi
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="bi bi-x-lg me-1"></i> Hủy bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script xem trước ảnh mới -->
+@section Scripts {
+    <script>
+        // Hàm xem trước ảnh mới khi người dùng chọn file
+        function previewNewImage(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var preview = document.getElementById('newImagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+}

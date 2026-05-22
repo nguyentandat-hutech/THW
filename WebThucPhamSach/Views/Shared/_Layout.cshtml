@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Organic Food Store</title>
+    <meta name="description" content="Website kinh doanh thực phẩm sạch, hữu cơ Organic. Rau củ, trái cây, thịt tươi đạt chuẩn VietGAP." />
+
+    <!-- Bootstrap 5 CSS từ CDN chính thức -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+          rel="stylesheet" />
+
+    <!-- Google Fonts - Nunito cho giao diện thân thiện -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+          rel="stylesheet" />
+
+    <!-- CSS tùy chỉnh của website -->
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+    <!-- ==================== HEADER ==================== -->
+    <!-- Header với nền xanh thành công (bg-success) theo yêu cầu Bài 1 -->
+    <header class="bg-success text-white py-3 shadow">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <!-- Logo và tên website -->
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-leaf fs-1 me-3"></i>
+                    <div>
+                        <h1 class="mb-0 fw-bold">Organic Food Store</h1>
+                        <small class="opacity-75">Thực phẩm sạch - An toàn cho sức khỏe</small>
+                    </div>
+                </div>
+                <!-- Icon giỏ hàng (trang trí) -->
+                <div class="d-none d-md-flex align-items-center">
+                    <i class="bi bi-telephone-fill me-2"></i>
+                    <span>Hotline: 1900 1234</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== THANH ĐIỀU HƯỚNG NAVBAR ==================== -->
+    <!-- Navbar Bootstrap 5 với khả năng responsive (thu gọn trên mobile) -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <!-- Nút hamburger cho mobile -->
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false"
+                    aria-label="Mở menu điều hướng">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Các mục menu -->
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Link Trang chủ / Danh sách sản phẩm -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Product" asp-action="Index">
+                            <i class="bi bi-house-door-fill me-1"></i> Trang chủ
+                        </a>
+                    </li>
+                    <!-- Link Thêm sản phẩm mới -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Product" asp-action="Add">
+                            <i class="bi bi-plus-circle-fill me-1"></i> Thêm sản phẩm
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Phần bên phải của Navbar -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-cart3 me-1"></i> Giỏ hàng
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== NỘI DUNG CHÍNH ==================== -->
+    <!-- Khu vực hiển thị thông báo thành công (từ TempData) -->
+    <div class="container mt-3">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+            </div>
+        }
+    </div>
+
+    <!-- Nội dung trang con được render tại đây -->
+    <main class="container my-4">
+        @RenderBody()
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <!-- Footer tối màu (bg-dark), chia 3 cột responsive theo yêu cầu Bài 1 -->
+    <footer class="bg-dark text-white pt-5 pb-3 mt-5">
+        <div class="container">
+            <div class="row">
+                <!-- Cột 1: Giới thiệu -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-success fw-bold">
+                        <i class="bi bi-leaf me-2"></i>Organic Food Store
+                    </h5>
+                    <p class="text-white-50">
+                        Chuyên cung cấp thực phẩm sạch, hữu cơ đạt tiêu chuẩn VietGAP.
+                        Cam kết 100% nguồn gốc rõ ràng, an toàn cho sức khỏe gia đình bạn.
+                    </p>
+                </div>
+
+                <!-- Cột 2: Liên kết nhanh -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-success fw-bold">Liên kết nhanh</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a asp-controller="Product" asp-action="Index" class="text-white-50 text-decoration-none">
+                                <i class="bi bi-chevron-right me-1"></i> Sản phẩm
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="text-white-50 text-decoration-none">
+                                <i class="bi bi-chevron-right me-1"></i> Giới thiệu
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="#" class="text-white-50 text-decoration-none">
+                                <i class="bi bi-chevron-right me-1"></i> Liên hệ
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Cột 3: Thông tin liên hệ -->
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-success fw-bold">Liên hệ</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li class="mb-2">
+                            <i class="bi bi-geo-alt-fill me-2 text-success"></i>
+                            123 Đường Nguyễn Văn Linh, TP.HCM
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-telephone-fill me-2 text-success"></i>
+                            1900 1234
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-envelope-fill me-2 text-success"></i>
+                            info@organicfoodstore.vn
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Dòng bản quyền -->
+            <hr class="border-secondary" />
+            <div class="text-center text-white-50">
+                <p class="mb-0">&copy; @DateTime.Now.Year Organic Food Store. Bài tập thực hành Lập trình Web.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JavaScript Bundle từ CDN chính thức -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+
+    <!-- Render các section script từ trang con (nếu có) -->
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,151 @@
+@model Product
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+}
+
+<!-- ==================== TRANG THÊM SẢN PHẨM MỚI ==================== -->
+<!-- Breadcrumb điều hướng -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-action="Index" class="text-success text-decoration-none">
+                <i class="bi bi-house-door-fill me-1"></i>Trang chủ
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Thêm sản phẩm</li>
+    </ol>
+</nav>
+
+<!-- Tiêu đề trang -->
+<div class="mb-4">
+    <h2 class="fw-bold text-success">
+        <i class="bi bi-plus-circle-fill me-2"></i>Thêm sản phẩm mới
+    </h2>
+    <p class="text-muted">Nhập thông tin sản phẩm thực phẩm sạch cần thêm vào hệ thống.</p>
+</div>
+
+<!-- Card chứa Form thêm sản phẩm -->
+<div class="card border-0 shadow-lg rounded-3">
+    <div class="card-body p-4 p-md-5">
+
+        <!-- Form thêm sản phẩm - sử dụng enctype để hỗ trợ upload file ảnh -->
+        <form asp-action="Add" method="post" enctype="multipart/form-data">
+            <!-- Token chống tấn công CSRF (tự động tạo bởi asp-action) -->
+
+            <div class="row">
+                <!-- Cột trái: Thông tin cơ bản -->
+                <div class="col-md-8">
+                    <!-- Trường nhập Tên sản phẩm -->
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold">
+                            <i class="bi bi-tag-fill text-success me-1"></i>Tên sản phẩm
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Name" class="form-control form-control-lg"
+                               placeholder="VD: Rau cải hữu cơ VietGAP" />
+                        <!-- Hiển thị thông báo lỗi validation -->
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Trường nhập Giá sản phẩm -->
+                    <div class="mb-3">
+                        <label asp-for="Price" class="form-label fw-semibold">
+                            <i class="bi bi-currency-exchange text-success me-1"></i>Giá (VNĐ)
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input asp-for="Price" class="form-control form-control-lg"
+                               type="number" min="1000" max="10000000" step="1000"
+                               placeholder="VD: 35000" />
+                        <span asp-validation-for="Price" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Dropdown chọn Danh mục sản phẩm -->
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label fw-semibold">
+                            <i class="bi bi-folder-fill text-success me-1"></i>Danh mục
+                        </label>
+                        <select asp-for="CategoryId" asp-items="@ViewBag.Categories"
+                                class="form-select form-select-lg">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                    </div>
+
+                    <!-- Trường nhập Mô tả sản phẩm -->
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label fw-semibold">
+                            <i class="bi bi-text-paragraph text-success me-1"></i>Mô tả
+                        </label>
+                        <textarea asp-for="Description" class="form-control"
+                                  rows="4"
+                                  placeholder="Mô tả nguồn gốc, chứng nhận hữu cơ, đặc điểm nổi bật..."></textarea>
+                        <span asp-validation-for="Description" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <!-- Cột phải: Upload ảnh sản phẩm -->
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="bi bi-image-fill text-success me-1"></i>Hình ảnh sản phẩm
+                        </label>
+                        <!-- Input chọn file ảnh (type="file") -->
+                        <input type="file" name="imageFile" id="imageFile"
+                               class="form-control" accept="image/*"
+                               onchange="previewImage(event)" />
+                        <small class="text-muted">Chọn file ảnh JPG, PNG (tối đa 5MB)</small>
+                    </div>
+
+                    <!-- Khung xem trước ảnh đã chọn -->
+                    <div class="mt-3 text-center">
+                        <div id="imagePreviewContainer"
+                             class="border rounded-3 p-3 bg-light"
+                             style="min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                            <div class="text-muted">
+                                <i class="bi bi-cloud-arrow-up display-4"></i>
+                                <p class="mt-2 mb-0">Xem trước ảnh</p>
+                            </div>
+                        </div>
+                        <img id="imagePreview" class="img-fluid rounded-3 mt-2"
+                             style="display:none; max-height: 250px;" alt="Xem trước" />
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <!-- Các nút hành động -->
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success btn-lg px-5">
+                    <i class="bi bi-check-lg me-1"></i> Thêm sản phẩm
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="bi bi-x-lg me-1"></i> Hủy bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Script xem trước ảnh khi chọn file -->
+@section Scripts {
+    <script>
+        // Hàm xem trước ảnh: hiển thị ảnh đã chọn ngay trên trình duyệt
+        function previewImage(event) {
+            var file = event.target.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // Hiển thị ảnh xem trước
+                    var preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    // Ẩn placeholder
+                    document.getElementById('imagePreviewContainer').style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+}

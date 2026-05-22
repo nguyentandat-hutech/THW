@@ -1,0 +1,110 @@
+@model Product
+
+@{
+    ViewData["Title"] = Model.Name + " - Chi tiết sản phẩm";
+}
+
+<!-- ==================== TRANG CHI TIẾT SẢN PHẨM ==================== -->
+<!-- Breadcrumb điều hướng -->
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a asp-action="Index" class="text-success text-decoration-none">
+                <i class="bi bi-house-door-fill me-1"></i>Trang chủ
+            </a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+    </ol>
+</nav>
+
+<!-- Nội dung chi tiết: 2 cột (ảnh trái, thông tin phải) -->
+<div class="card border-0 shadow-lg rounded-3 overflow-hidden">
+    <div class="row g-0">
+        <!-- Cột trái: Hình ảnh lớn của sản phẩm -->
+        <div class="col-md-5">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="~/images/@Model.ImageUrl"
+                     class="img-fluid w-100 h-100 object-fit-cover"
+                     alt="@Model.Name"
+                     style="min-height: 350px;" />
+            }
+            else
+            {
+                <!-- Placeholder nếu chưa có ảnh -->
+                <div class="bg-light d-flex align-items-center justify-content-center h-100"
+                     style="min-height: 350px;">
+                    <div class="text-center text-muted">
+                        <i class="bi bi-image display-1"></i>
+                        <p class="mt-2">Chưa có hình ảnh</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Cột phải: Thông tin chi tiết sản phẩm -->
+        <div class="col-md-7">
+            <div class="card-body p-4 p-md-5">
+                <!-- Badge danh mục -->
+                <span class="badge bg-success mb-3 px-3 py-2">
+                    <i class="bi bi-tag-fill me-1"></i>@ViewBag.CategoryName
+                </span>
+
+                <!-- Tên sản phẩm -->
+                <h2 class="card-title fw-bold text-dark mb-3">@Model.Name</h2>
+
+                <!-- Giá tiền nổi bật -->
+                <div class="bg-success bg-opacity-10 rounded-3 p-3 mb-4">
+                    <h3 class="text-success fw-bold mb-0">
+                        <i class="bi bi-currency-exchange me-2"></i>
+                        @Model.Price.ToString("N0") VNĐ
+                    </h3>
+                </div>
+
+                <!-- Mô tả chi tiết nguồn gốc hữu cơ -->
+                <h5 class="fw-bold text-dark mb-2">
+                    <i class="bi bi-info-circle-fill text-success me-2"></i>Mô tả sản phẩm
+                </h5>
+                <p class="text-muted lh-lg mb-4">
+                    @(Model.Description ?? "Chưa có mô tả cho sản phẩm này.")
+                </p>
+
+                <!-- Thông tin bổ sung -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3 text-center">
+                            <i class="bi bi-shield-check text-success fs-4"></i>
+                            <p class="mb-0 small mt-1 fw-semibold">An toàn</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="border rounded-3 p-3 text-center">
+                            <i class="bi bi-patch-check text-success fs-4"></i>
+                            <p class="mb-0 small mt-1 fw-semibold">Chứng nhận</p>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+
+                <!-- Các nút hành động -->
+                <div class="d-flex gap-2 flex-wrap">
+                    <!-- Nút Quay lại danh sách -->
+                    <a asp-action="Index" class="btn btn-success btn-lg">
+                        <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+                    </a>
+                    <!-- Nút Chỉnh sửa -->
+                    <a asp-action="Update" asp-route-id="@Model.Id"
+                       class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-pencil-square me-1"></i> Chỉnh sửa
+                    </a>
+                    <!-- Nút Xóa -->
+                    <a asp-action="Delete" asp-route-id="@Model.Id"
+                       class="btn btn-outline-danger btn-lg">
+                        <i class="bi bi-trash3-fill me-1"></i> Xóa
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

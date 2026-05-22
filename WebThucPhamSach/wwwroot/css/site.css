@@ -1,0 +1,134 @@
+/* ========================================
+   CSS Tùy Chỉnh - Organic Food Store
+   Website Kinh Doanh Thực Phẩm Sạch
+   ======================================== */
+
+/* === FONT CHỮ CHUNG === */
+body {
+    font-family: 'Nunito', sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Đảm bảo Footer luôn ở cuối trang */
+main {
+    flex: 1;
+}
+
+/* === HIỆU ỨNG CARD SẢN PHẨM === */
+/* Card có hiệu ứng nổi lên khi hover */
+.product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* === HÌNH ẢNH SẢN PHẨM TRONG CARD === */
+/* Kích thước cố định cho ảnh sản phẩm để card đồng đều */
+.product-img {
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-img {
+    transform: scale(1.05);
+}
+
+/* Placeholder khi chưa có ảnh */
+.product-img-placeholder {
+    height: 220px;
+}
+
+/* === NÚT BẤM === */
+/* Hiệu ứng mượt cho tất cả các nút */
+.btn {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* === NAVBAR === */
+/* Thanh điều hướng với font chữ đậm và khoảng cách hợp lý */
+.navbar .nav-link {
+    font-weight: 600;
+    padding: 0.7rem 1.2rem !important;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.navbar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* === HEADER === */
+header h1 {
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+/* === FOOTER === */
+footer a:hover {
+    color: #198754 !important;
+    transition: color 0.3s ease;
+}
+
+/* === FORM INPUT === */
+/* Viền mượt hơn cho các trường nhập liệu */
+.form-control:focus,
+.form-select:focus {
+    border-color: #198754;
+    box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* === BREADCRUMB === */
+.breadcrumb {
+    background-color: transparent;
+    padding: 0;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "›";
+    font-weight: bold;
+}
+
+/* === ALERT THÔNG BÁO === */
+/* Hiệu ứng trượt vào cho thông báo */
+.alert {
+    animation: slideDown 0.4s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === RESPONSIVE === */
+/* Điều chỉnh cho màn hình nhỏ (Mobile) */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    .product-img {
+        height: 180px;
+    }
+}
