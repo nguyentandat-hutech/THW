@@ -1,0 +1,140 @@
+@model WebThucPhamSach.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <!-- Header card -->
+            <div class="text-white text-center py-4" style="background:linear-gradient(135deg,#2d6a4f,#52b788);">
+                <i class="bi bi-person-plus-fill fs-1 mb-2 d-block"></i>
+                <h4 class="fw-bold mb-0">Tạo tài khoản mới</h4>
+                <small class="opacity-75">Tham gia cộng đồng Organic Food Store</small>
+            </div>
+
+            <div class="card-body p-4">
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Hiển thị lỗi chung (ví dụ: email đã tồn tại) -->
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger d-none" id="validationSummary"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-person text-success"></i>
+                            </span>
+                            <input asp-for="UserName" class="form-control border-start-0"
+                                   placeholder="Tên đăng nhập (VD: nguyenvana)" />
+                        </div>
+                        <span asp-validation-for="UserName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-envelope text-success"></i>
+                            </span>
+                            <input asp-for="Email" class="form-control border-start-0"
+                                   placeholder="example@email.com" />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FullName" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-card-text text-success"></i>
+                            </span>
+                            <input asp-for="FullName" class="form-control border-start-0"
+                                   placeholder="Nhập họ và tên đầy đủ" />
+                        </div>
+                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-geo-alt text-success"></i>
+                            </span>
+                            <input asp-for="Address" class="form-control border-start-0"
+                                   placeholder="Địa chỉ giao hàng (không bắt buộc)" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-lock text-success"></i>
+                            </span>
+                            <input asp-for="Password" class="form-control border-start-0"
+                                   placeholder="Ít nhất 6 ký tự" id="passwordInput" />
+                            <button class="btn btn-outline-secondary border-start-0" type="button"
+                                    onclick="togglePass('passwordInput', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="ConfirmPassword" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-lock-fill text-success"></i>
+                            </span>
+                            <input asp-for="ConfirmPassword" class="form-control border-start-0"
+                                   placeholder="Nhập lại mật khẩu" id="confirmInput" />
+                            <button class="btn btn-outline-secondary border-start-0" type="button"
+                                    onclick="togglePass('confirmInput', this)">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-success w-100 py-2 fw-bold">
+                        <i class="bi bi-person-check me-2"></i>Tạo tài khoản
+                    </button>
+                </form>
+
+                <hr class="my-3" />
+                <p class="text-center text-muted mb-0">
+                    Đã có tài khoản?
+                    <a asp-controller="Account" asp-action="Login" class="text-success fw-bold text-decoration-none">
+                        Đăng nhập ngay
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Kiểm tra có lỗi validation không để hiện alert
+        const summary = document.getElementById('validationSummary');
+        if (summary && summary.querySelectorAll('li').length > 0) {
+            summary.classList.remove('d-none');
+        }
+        function togglePass(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        }
+    </script>
+}

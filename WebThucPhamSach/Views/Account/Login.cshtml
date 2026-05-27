@@ -1,0 +1,105 @@
+@model WebThucPhamSach.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+    Layout = "_Layout";
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <!-- Header card -->
+            <div class="text-white text-center py-4" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);">
+                <i class="bi bi-box-arrow-in-right fs-1 mb-2 d-block"></i>
+                <h4 class="fw-bold mb-0">Đăng nhập</h4>
+                <small class="opacity-75">Organic Food Store</small>
+            </div>
+
+            <div class="card-body p-4">
+                <!-- Lỗi chung -->
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger small py-2"></div>
+
+                <form asp-controller="Account" asp-action="Login"
+                      asp-route-returnUrl="@returnUrl" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-envelope text-primary"></i>
+                            </span>
+                            <input asp-for="Email" class="form-control border-start-0"
+                                   placeholder="Email đăng nhập" autofocus />
+                        </div>
+                        <span asp-validation-for="Email" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label fw-600 small text-uppercase text-muted"></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-lock text-primary"></i>
+                            </span>
+                            <input asp-for="Password" class="form-control border-start-0"
+                                   placeholder="Mật khẩu" id="loginPass" />
+                            <button class="btn btn-outline-secondary border-start-0" type="button"
+                                    onclick="togglePass()">
+                                <i class="bi bi-eye" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                        <span asp-validation-for="Password" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" class="form-check-input" type="checkbox" />
+                            <label asp-for="RememberMe" class="form-check-label small text-muted"></label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100 py-2 fw-bold">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Đăng nhập
+                    </button>
+                </form>
+
+                <hr class="my-3" />
+                <p class="text-center text-muted mb-0">
+                    Chưa có tài khoản?
+                    <a asp-controller="Account" asp-action="Register"
+                       class="text-success fw-bold text-decoration-none">Đăng ký ngay</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Tài khoản demo hint -->
+        <div class="card border-0 shadow-sm mt-3 rounded-3">
+            <div class="card-body py-3 px-4">
+                <p class="text-muted small mb-2 fw-bold">
+                    <i class="bi bi-info-circle me-1"></i>Tài khoản mẫu:
+                </p>
+                <div class="small text-muted">
+                    <div>🔴 <strong>Admin:</strong> admin@organicfood.vn / Admin@123</div>
+                    <div>🟢 <strong>Member:</strong> member@organicfood.vn / Member@123</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function togglePass() {
+            const input = document.getElementById('loginPass');
+            const icon = document.getElementById('eyeIcon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        }
+    </script>
+}

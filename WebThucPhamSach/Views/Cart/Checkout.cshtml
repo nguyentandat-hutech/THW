@@ -1,0 +1,156 @@
+@model IEnumerable<WebThucPhamSach.Models.CartItem>
+@{
+    ViewData["Title"] = "Thanh toán & Đặt hàng";
+    Layout = "_Layout";
+    var fullName = ViewBag.FullName as string;
+    var address = ViewBag.Address as string;
+    var phoneNumber = ViewBag.PhoneNumber as string;
+    var totalPrice = (decimal)ViewBag.TotalPrice;
+}
+
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Product" asp-action="Index" class="text-success text-decoration-none">Cửa hàng</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Cart" asp-action="Index" class="text-success text-decoration-none">Giỏ hàng</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+        </ol>
+    </nav>
+
+    <h2 class="fw-bold mb-4 text-success">
+        <i class="bi bi-credit-card me-2"></i>Thanh toán đơn hàng
+    </h2>
+
+    <div class="row g-4">
+        <!-- Cột Form thông tin giao hàng -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4 p-md-5">
+                <h4 class="fw-bold text-dark mb-4 border-bottom border-light pb-3">
+                    <i class="bi bi-geo-alt text-success me-2"></i>Thông tin nhận hàng
+                </h4>
+
+                <form asp-controller="Cart" asp-action="PlaceOrder" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    <div class="text-danger mb-3" asp-validation-summary="ModelOnly"></div>
+
+                    <!-- Tên người nhận (Chỉ đọc từ profile) -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-secondary">Họ và tên người đặt</label>
+                        <input type="text" class="form-control rounded-3 py-2-5 bg-light" value="@fullName" readonly />
+                        <small class="text-muted">Tên tài khoản thành viên của bạn</small>
+                    </div>
+
+                    <!-- Số điện thoại nhận hàng (Bắt buộc nhập) -->
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label fw-semibold text-dark">Số điện thoại nhận hàng <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 rounded-start-3"><i class="bi bi-telephone text-muted"></i></span>
+                            <input type="tel" name="phoneNumber" id="phoneNumber" class="form-control border-start-0 rounded-end-3 py-2-5" 
+                                   value="@phoneNumber" placeholder="Nhập số điện thoại di động..." required />
+                        </div>
+                        <div class="invalid-feedback">Số điện thoại là bắt buộc.</div>
+                    </div>
+
+                    <!-- Địa chỉ giao hàng (Bắt buộc nhập, điền sẵn) -->
+                    <div class="mb-3">
+                        <label for="shippingAddress" class="form-label fw-semibold text-dark">Địa chỉ giao hàng thực tế <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 rounded-start-3"><i class="bi bi-house-door text-muted"></i></span>
+                            <textarea name="shippingAddress" id="shippingAddress" class="form-control border-start-0 rounded-end-3" 
+                                      rows="3" placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố..." required>@address</textarea>
+                        </div>
+                        <div class="invalid-feedback">Vui lòng cung cấp địa chỉ nhận hàng chính xác.</div>
+                    </div>
+
+                    <!-- Ghi chú đơn hàng (Tùy chọn) -->
+                    <div class="mb-4">
+                        <label for="notes" class="form-label fw-semibold text-dark">Ghi chú (Tùy chọn)</label>
+                        <textarea name="notes" id="notes" class="form-control rounded-3" rows="2" 
+                                  placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao 15 phút, v.v."></textarea>
+                    </div>
+
+                    <!-- Phương thức thanh toán (Demo COD) -->
+                    <div class="mb-4 bg-light p-3 rounded-3">
+                        <label class="form-label fw-bold text-dark d-block mb-2">Phương thức thanh toán</label>
+                        <div class="form-check">
+                            <input class="form-check-input text-success" type="radio" name="paymentMethod" id="cod" checked>
+                            <label class="form-check-label fw-semibold text-dark" for="cod">
+                                Thanh toán khi nhận hàng (COD)
+                            </label>
+                            <span class="d-block text-muted fs-7">Thanh toán bằng tiền mặt ngay khi nhân viên giao thực phẩm sạch tới tay bạn.</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm">
+                        <i class="bi bi-box2-heart me-2"></i>Xác nhận đặt hàng ngay
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Cột tóm tắt giỏ hàng bên phải -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                <h4 class="fw-bold text-dark mb-4 border-bottom border-light pb-3">Đơn hàng của bạn</h4>
+                
+                <div class="overflow-auto mb-4" style="max-height: 350px;">
+                    @foreach (var item in Model)
+                    {
+                        var itemTotal = item.Product.Price * item.Quantity;
+                        <div class="d-flex align-items-center mb-3 pb-3 border-bottom border-light">
+                            <div class="rounded-3 overflow-hidden bg-light border border-light flex-shrink-0" style="width: 55px; height: 55px;">
+                                <img src="~/images/@(string.IsNullOrEmpty(item.Product.ImageUrl) ? "no-image.jpg" : item.Product.ImageUrl)" 
+                                     class="w-100 h-100 object-fit-cover" 
+                                     alt="@item.Product.Name" 
+                                     onerror="this.src='/images/no-image.jpg';" />
+                            </div>
+                            <div class="ms-3 flex-grow-1">
+                                <h6 class="fw-bold text-dark mb-0 fs-7">@item.Product.Name</h6>
+                                <small class="text-secondary">Số lượng: @item.Quantity</small>
+                            </div>
+                            <div class="text-end ms-2">
+                                <span class="fw-bold text-success fs-7">@itemTotal.ToString("#,##0") đ</span>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="border-top border-light pt-3">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">Tạm tính</span>
+                        <span class="fw-semibold">@totalPrice.ToString("#,##0") đ</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">Phí vận chuyển</span>
+                        <span class="text-success fw-semibold">Miễn phí</span>
+                    </div>
+                    <hr class="my-2 border-light">
+                    <div class="d-flex justify-content-between align-items-center mb-0 mt-2">
+                        <span class="fw-bold text-dark fs-5">Tổng cộng</span>
+                        <span class="fw-extrabold text-success fs-4">@totalPrice.ToString("#,##0") đ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .py-2-5 {
+            padding-top: 0.65rem;
+            padding-bottom: 0.65rem;
+        }
+        .object-fit-cover {
+            object-fit: cover;
+        }
+        .fs-7 {
+            font-size: 0.85rem;
+        }
+        .fw-extrabold {
+            font-weight: 800;
+        }
+    </style>
+}
