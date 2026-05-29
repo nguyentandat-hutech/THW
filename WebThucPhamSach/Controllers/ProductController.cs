@@ -1,65 +1,185 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebThucPhamSach.Models;
-using WebThucPhamSach.Repositories;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using webthucphamsach.Models;
+using webthucphamsach.Repositories;
 
-namespace WebThucPhamSach.Controllers
+namespace webthucphamsach.Controllers
 {
-    /// <summary>
-    /// Controller công khai — Cho phép tất cả mọi người (kể cả chưa đăng nhập):
-    ///   - Xem danh sách sản phẩm (có thể lọc theo danh mục)
-    ///   - Xem chi tiết một sản phẩm
-    /// Các chức năng CRUD (Thêm/Sửa/Xóa) đã chuyển sang Area Admin.
-    /// </summary>
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
 
-        public ProductController(
-            IProductRepository productRepository,
-            ICategoryRepository categoryRepository)
+        public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
             _productRepository = productRepository;
             _categoryRepository = categoryRepository;
         }
 
-        /// <summary>
-        /// GET: /Product hoặc /Product?categoryId=1
-        /// Hiển thị danh sách sản phẩm, có hỗ trợ lọc theo danh mục.
-        /// </summary>
-        public IActionResult Index(int? categoryId)
+        // 1. HIỂN THỊ DANH SÁCH SẢN PHẨM (INDEX) - ASYNC
+        public async Task<IActionResult> Index()
         {
-            // Lấy danh sách tất cả danh mục để hiển thị bộ lọc
-            var categories = _categoryRepository.GetAll();
+            var products = await _productRepository.GetAllAsync();
+            var categories = (await _categoryRepository.GetAllAsync()).ToDictionary(c => c.Id, c => c.Name);
             ViewBag.Categories = categories;
-            ViewBag.SelectedCategoryId = categoryId;
-
-            // Lọc sản phẩm theo danh mục nếu có tham số categoryId
-            var products = _productRepository.GetAll();
-            if (categoryId.HasValue && categoryId.Value > 0)
-            {
-                products = products.Where(p => p.CategoryId == categoryId.Value);
-                var selectedCat = _categoryRepository.GetById(categoryId.Value);
-                ViewBag.SelectedCategoryName = selectedCat?.Name;
-            }
-
             return View(products);
         }
 
-        /// <summary>
-        /// GET: /Product/Display/5
-        /// Hiển thị chi tiết một sản phẩm theo Id.
-        /// </summary>
-        public IActionResult Display(int id)
+        // 2. HIỂN THỊ CHI TIẾT SẢN PHẨM (DISPLAY) - ASYNC
+        public async Task<IActionResult> Display(int id)
         {
-            var product = _productRepository.GetById(id);
+            var product = await _productRepository.GetByIdAsync(id);
             if (product == null)
+            {
                 return NotFound();
-
-            var category = _categoryRepository.GetById(product.CategoryId);
-            ViewBag.CategoryName = category?.Name ?? "Chưa phân loại";
-
+            }
+            var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
+            ViewBag.CategoryName = category != null ? category.Name : "Không xác định";
             return View(product);
+        }
+
+        // 3. THÊM MỚI SẢN PHẨM - GET - ASYNC
+        [HttpGet]
+        public async Task<IActionResult> Add()
+        {
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+            return View();
+        }
+
+        // 4. THÊM MỚI SẢN PHẨM - POST - ASYNC
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Add(Product product, IFormFile? ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                // Xử lý upload file hình ảnh đại diện
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                    
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(ImageFile.FileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    product.ImageUrl = "/images/" + uniqueFileName;
+                }
+                else
+                {
+                    product.ImageUrl = "/images/default-food.jpg";
+                }
+
+                await _productRepository.AddAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name", product.CategoryId);
+            return View(product);
+        }
+
+        // 5. CẬP NHẬT CHỈNH SỬA SẢN PHẨM - GET - ASYNC
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name", product.CategoryId);
+            return View(product);
+        }
+
+        // 6. CẬP NHẬT CHỈNH SỬA SẢN PHẨM - POST - ASYNC
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(Product product, IFormFile? ImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                var existingProduct = await _productRepository.GetByIdAsync(product.Id);
+                if (existingProduct == null)
+                {
+                    return NotFound();
+                }
+
+                // Cập nhật thông tin từ form
+                existingProduct.Name = product.Name;
+                existingProduct.Price = product.Price;
+                existingProduct.Description = product.Description;
+                existingProduct.CategoryId = product.CategoryId;
+
+                // Nếu có file ảnh mới tải lên
+                if (ImageFile != null && ImageFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+                    
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(ImageFile.FileName);
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    existingProduct.ImageUrl = "/images/" + uniqueFileName;
+                }
+
+                await _productRepository.UpdateAsync(existingProduct);
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name", product.CategoryId);
+            return View(product);
+        }
+
+        // 7. XÓA SẢN PHẨM - GET - ASYNC
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            var category = await _categoryRepository.GetByIdAsync(product.CategoryId);
+            ViewBag.CategoryName = category != null ? category.Name : "Không xác định";
+            return View(product);
+        }
+
+        // 8. XÓA SẢN PHẨM - POST - ASYNC
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            await _productRepository.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

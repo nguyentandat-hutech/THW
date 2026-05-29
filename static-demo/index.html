@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenFood - Hệ Thống Cửa Hàng Thực Phẩm Sạch & Hữu Cơ</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- FontAwesome Icons CDN (để lấy icon hiện đại) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Style CSS Tùy Chỉnh -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+    <!-- THÀNH MENU ĐIỀU HƯỚNG (NAVBAR) -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+        <div class="container">
+            <!-- Logo Thương hiệu -->
+            <a class="navbar-brand navbar-brand-custom" href="#">
+                <i class="fa-solid fa-leaf"></i>
+                <span>GreenFood</span>
+            </a>
+            
+            <!-- Nút Toggle trên thiết bị di động -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu nội dung chính -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom active" aria-current="page" href="#"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="#"><i class="fa-solid fa-basket-shopping me-1"></i> Sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" href="#"><i class="fa-solid fa-envelope me-1"></i> Liên hệ</a>
+                    </li>
+                </ul>
+                
+                <!-- Thanh tìm kiếm hiện đại -->
+                <form class="d-flex me-3" role="search">
+                    <div class="input-group">
+                        <input class="form-control search-box" type="search" placeholder="Tìm thực phẩm sạch..." aria-label="Search">
+                        <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+                
+                <!-- Nút Giỏ hàng (Cart Button) với Badge -->
+                <button class="cart-icon-btn" title="Giỏ hàng của bạn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge">3</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PHẦN CHÀO MỪNG (HERO SECTION) -->
+    <div class="container mt-4">
+        <div class="hero-section animate-fade-in">
+            <div class="row align-items-center">
+                <!-- Nội dung chữ -->
+                <div class="col-lg-6 col-12 mb-4 mb-lg-0">
+                    <span class="hero-tagline">100% Hữu cơ tự nhiên</span>
+                    <h1 class="hero-title">Thực phẩm <span>Sạch & Xanh</span><br>Cho gia đình bạn</h1>
+                    <p class="hero-desc">Chúng tôi mang lại nguồn năng lượng sống dồi dào từ tự nhiên đến trực tiếp bàn ăn của bạn. Các sản phẩm đều đạt chứng nhận chuẩn VietGAP, GlobalGAP tốt cho sức khỏe.</p>
+                    <a href="#" class="btn btn-hero">Khám Phá Ngay <i class="fa-solid fa-circle-arrow-right ms-1"></i></a>
+                </div>
+                <!-- Hình ảnh minh họa -->
+                <div class="col-lg-6 col-12 text-center">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&auto=format&fit=crop&q=80" alt="Rau quả tươi sạch hữu cơ" class="hero-image rounded shadow-sm img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BỐ CỤC CHÍNH CỦA TRANG CHỦ (2 CỘT) -->
+    <main class="container mb-5">
+        <div class="row">
+            
+            <!-- CỘT TRÁI (CHIẾM 75% TRÊN MÁY TÍNH - col-lg-9) -->
+            <div class="col-lg-9 col-md-12 col-12">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="section-title">Thực Phẩm Mới Về Hôm Nay</h2>
+                    <span class="text-muted d-none d-sm-block">Hiển thị 6 sản phẩm</span>
+                </div>
+                
+                <!-- LƯỚI DANH SÁCH SẢN PHẨM (Grid Product Cards) -->
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                    
+                    <!-- Sản phẩm 1 -->
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <span class="product-badge">VietGAP</span>
+                                <img src="https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=600&auto=format&fit=crop&q=80" alt="Cải bó xôi hữu cơ" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-cat">Rau xanh hữu cơ</span>
+                                <a href="#" class="product-name">Rau cải bó xôi hữu cơ Đà Lạt</a>
+                                <p class="product-desc">Cải bó xôi tươi giòn, giàu chất sắt và vitamin, trồng theo tiêu chuẩn hữu cơ, không thuốc hóa học.</p>
+                                <div class="product-footer">
+                                    <span class="product-price">35.000 đ <small class="text-muted">/ kg</small></span>
+                                    <button class="btn btn-buy">Mua Ngay <i class="fa-solid fa-cart-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sản phẩm 2 -->
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <span class="product-badge sale">-15%</span>
+                                <img src="https://images.unsplash.com/photo-1619546813926-a78fa6372cd2?w=600&auto=format&fit=crop&q=80" alt="Táo đỏ nhập khẩu" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-cat">Trái cây nhập khẩu</span>
+                                <a href="#" class="product-name">Táo đỏ Fuji hữu cơ cao cấp</a>
+                                <p class="product-desc">Táo Fuji giòn ngọt, mọng nước, nhập khẩu chính ngạch từ trang trại đạt chuẩn hữu cơ thế giới.</p>
+                                <div class="product-footer">
+                                    <span class="product-price">89.000 đ <del>105.000 đ</del></span>
+                                    <button class="btn btn-buy">Mua Ngay <i class="fa-solid fa-cart-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sản phẩm 3 -->
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <span class="product-badge">100% Sạch</span>
+                                <img src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=600&auto=format&fit=crop&q=80" alt="Cà rốt Đà Lạt" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-cat">Củ quả tự nhiên</span>
+                                <a href="#" class="product-name">Cà rốt ngọt Đà Lạt VietGAP</a>
+                                <p class="product-desc">Củ cà rốt tươi ngon, ngọt đậm, thích hợp dùng làm nước ép hoặc chế biến món ăn bổ dưỡng mỗi ngày.</p>
+                                <div class="product-footer">
+                                    <span class="product-price">28.000 đ <small class="text-muted">/ kg</small></span>
+                                    <button class="btn btn-buy">Mua Ngay <i class="fa-solid fa-cart-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sản phẩm 4 -->
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <span class="product-badge sale">Bán chạy</span>
+                                <img src="https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600&auto=format&fit=crop&q=80" alt="Dâu tây Đà Lạt" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-cat">Trái cây sạch</span>
+                                <a href="#" class="product-name">Dâu tây đỏ New Zealand trồng Đà Lạt</a>
+                                <p class="product-desc">Dâu tây căng mọng, vị chua ngọt hài hòa, được thu hoạch trực tiếp tại vườn công nghệ cao vào sáng sớm.</p>
+                                <div class="product-footer">
+                                    <span class="product-price">120.000 đ <small class="text-muted">/ hộp 500g</small></span>
+                                    <button class="btn btn-buy">Mua Ngay <i class="fa-solid fa-cart-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sản phẩm 5 -->
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <span class="product-badge">Organic</span>
+                                <img src="https://images.unsplash.com/photo-1550583724-b2692b85b150?w=600&auto=format&fit=crop&q=80" alt="Sữa tươi & Trứng" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-cat">Trứng & Sữa sạch</span>
+                                <a href="#" class="product-name">Trứng gà ta thảo mộc tự nhiên</a>
+                                <p class="product-desc">Trứng từ đàn gà ta thả vườn được nuôi dưỡng bằng thảo mộc tự nhiên, hàm lượng dinh dưỡng cao vượt trội.</p>
+                                <div class="product-footer">
+                                    <span class="product-price">45.000 đ <small class="text-muted">/ vỉ 10 quả</small></span>
+                                    <button class="btn btn-buy">Mua Ngay <i class="fa-solid fa-cart-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sản phẩm 6 -->
+                    <div class="col">
+                        <div class="product-card">
+                            <div class="product-img-wrapper">
+                                <span class="product-badge sale">Mới</span>
+                                <img src="https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600&auto=format&fit=crop&q=80" alt="Mật ong rừng" class="product-img">
+                            </div>
+                            <div class="product-info">
+                                <span class="product-cat">Đặc sản vùng miền</span>
+                                <a href="#" class="product-name">Mật ong rừng tràm U Minh nguyên chất</a>
+                                <p class="product-desc">Mật ong rừng tự nhiên nguyên chất 100%, mùi thơm đặc trưng, vị ngọt thanh tốt cho hệ tiêu hóa.</p>
+                                <div class="product-footer">
+                                    <span class="product-price">180.000 đ <small class="text-muted">/ chai 350ml</small></span>
+                                    <button class="btn btn-buy">Mua Ngay <i class="fa-solid fa-cart-plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- CỘT PHẢI - SIDEBAR (CHIẾM 25% TRÊN MÁY TÍNH - col-lg-3, xếp chồng trên Mobile) -->
+            <aside class="col-lg-3 col-md-12 col-12 mt-5 mt-lg-0">
+                
+                <!-- Widget 1: Danh mục thực phẩm sạch -->
+                <div class="sidebar-widget">
+                    <h3 class="widget-title">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <span>Danh Mục Thực Phẩm</span>
+                    </h3>
+                    <ul class="category-list">
+                        <li class="category-item">
+                            <a href="#" class="category-link">
+                                <span><i class="fa-solid fa-carrot me-2 text-success"></i>Rau Xanh Hữu Cơ</span>
+                                <span class="category-badge">42</span>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">
+                                <span><i class="fa-solid fa-apple-whole me-2 text-danger"></i>Trái Cây Sạch</span>
+                                <span class="category-badge">28</span>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">
+                                <span><i class="fa-solid fa-cow me-2 text-warning"></i>Trứng & Sữa Tươi</span>
+                                <span class="category-badge">15</span>
+                            </a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">
+                                <span><i class="fa-solid fa-wheat-awn me-2 text-info"></i>Hạt & Đồ Khô Hữu Cơ</span>
+                                <span class="category-badge">20</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Widget 2: Banner Khuyến mãi ấn tượng -->
+                <div class="sidebar-widget p-0 border-0 overflow-hidden">
+                    <div class="promo-card">
+                        <div class="promo-percent">Giảm 20%</div>
+                        <h4 class="promo-title">Giỏ Rau Xanh Cuối Tuần</h4>
+                        <p class="promo-desc">Áp dụng cho mọi đơn hàng rau củ quả tươi được đặt từ ngày Thứ Sáu đến Chủ Nhật tuần này.</p>
+                        <button class="btn btn-promo">Lấy Mã Ngay <i class="fa-solid fa-ticket ms-1"></i></button>
+                    </div>
+                </div>
+                
+                <!-- Widget 3: Cam kết chất lượng / Thông tin bổ sung -->
+                <div class="sidebar-widget mt-4">
+                    <h3 class="widget-title">
+                        <i class="fa-solid fa-shield-halved"></i>
+                        <span>Cam Kết GreenFood</span>
+                    </h3>
+                    
+                    <div class="commitment-item">
+                        <div class="commitment-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <div class="commitment-text">
+                            <h5>Đạt Chuẩn An Toàn</h5>
+                            <p>Tất cả sản phẩm đạt kiểm nghiệm VietGAP và có chứng từ nguồn gốc rõ ràng.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="commitment-item">
+                        <div class="commitment-icon">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div class="commitment-text">
+                            <h5>100% Không Hóa Chất</h5>
+                            <p>Không chất bảo quản, không phân bón hóa học và thuốc trừ sâu độc hại.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="commitment-item">
+                        <div class="commitment-icon">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <div class="commitment-text">
+                            <h5>Giao Hàng Siêu Tốc 2h</h5>
+                            <p>Đảm bảo rau củ quả vẫn giữ trọn vị tươi nguyên từ vườn đến nhà bạn.</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </aside>
+            
+        </div>
+    </main>
+
+    <!-- CHÂN TRANG (FOOTER - CHIA 3 CỘT TRÊN MÁY TÍNH, XẾP CHỒNG TRÊN DI ĐỘNG) -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row g-4">
+                
+                <!-- Cột 1: Thông tin cửa hàng GreenFood -->
+                <div class="col-lg-4 col-md-12 col-12">
+                    <a class="footer-brand" href="#">
+                        <i class="fa-solid fa-leaf"></i>
+                        <span>GreenFood</span>
+                    </a>
+                    <p class="footer-desc">GreenFood là hệ thống phân phối thực phẩm hữu cơ, rau củ quả sạch chuẩn chất lượng VietGAP lớn nhất toàn quốc. Sứ mệnh của chúng tôi là bảo vệ sức khỏe người Việt qua từng bữa ăn sạch lành.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Cột 2: Chính sách mua hàng -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <h4 class="footer-title">Chính Sách & Liên Kết</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Chính sách đổi trả trong 24h</a>
+                        </li>
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Chính sách vận chuyển & giao hàng</a>
+                        </li>
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Hướng dẫn mua hàng online</a>
+                        </li>
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Cam kết chất lượng thực phẩm</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Cột 3: Liên hệ hỗ trợ -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <h4 class="footer-title">Thông Tin Liên Hệ</h4>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <p>276 Điện Biên Phủ, Phường 17, Quận Bình Thạnh, TP. Hồ Chí Minh (HUTECH Campus)</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <p>1900 123 456 - 028 3840 578</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>support@greenfood.vn - info@greenfood.vn</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <p>Giờ làm việc: 07:00 - 21:00 (Hằng ngày)</p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Phần Bản quyền ở đáy Footer -->
+            <div class="footer-bottom">
+                <p class="m-0">&copy; 2026 GreenFood Organic Store. Tất cả quyền được bảo lưu. Thiết kế và phát triển bởi Đồ án Lập trình Web HUTECH.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle CDN (để navbar toggler và các hiệu ứng động hoạt động) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

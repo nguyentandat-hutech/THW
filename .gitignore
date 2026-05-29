@@ -1,0 +1,41 @@
+## Ignore Visual Studio & .NET build artifacts
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa]rm/
+[Aa]rm64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+## Visual Studio Cache and settings
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+## VS Code
+.vscode/
+
+## User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.clw
+*.ncb
+*.aps
+*.uwsp
+*.pdb
+*.sql
+
+## Temp / Publish
+publish/
+**/wwwroot/images/*
+!**/wwwroot/images/default-food.jpg

@@ -3,272 +3,139 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Organic Food Store</title>
-    <meta name="description" content="Website kinh doanh thực phẩm sạch, hữu cơ Organic. Rau củ, trái cây, thịt tươi đạt chuẩn VietGAP." />
-
-    <!-- Bootstrap 5 CSS từ CDN chính thức -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-          crossorigin="anonymous" />
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-          rel="stylesheet" />
-
-    <!-- Google Fonts - Nunito cho giao diện thân thiện -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
-          rel="stylesheet" />
-
-    <!-- CSS tùy chỉnh của website -->
-    <link rel="stylesheet" href="~/css/site.css" />
+    <title>@ViewData["Title"] - GreenFood Organic Store</title>
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <!-- FontAwesome Icons CDN (để lấy icon hiện đại) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Style CSS Tùy Chỉnh -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/webthucphamsach.styles.css" asp-append-version="true" />
 </head>
 <body>
-
-    <!-- ==================== HEADER ==================== -->
-    <!-- Header với nền xanh thành công (bg-success) theo yêu cầu Bài 1 -->
-    <header class="bg-success text-white py-3 shadow">
+    <!-- THÀNH MENU ĐIỀU HƯỚNG (NAVBAR) -->
+    <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
         <div class="container">
-            <div class="d-flex align-items-center justify-content-between">
-                <!-- Logo và tên website -->
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-leaf fs-1 me-3"></i>
-                    <div>
-                        <h1 class="mb-0 fw-bold">Organic Food Store</h1>
-                        <small class="opacity-75">Thực phẩm sạch - An toàn cho sức khỏe</small>
-                    </div>
-                </div>
-                <!-- Icon giỏ hàng (trang trí) -->
-                <div class="d-none d-md-flex align-items-center">
-                    <i class="bi bi-telephone-fill me-2"></i>
-                    <span>Hotline: 0367346115</span>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- ==================== THANH ĐIỀU HƯỚNG NAVBAR ==================== -->
-    @using WebThucPhamSach.Helpers
-    @{
-        var cartItems = Context.Session.Get<List<CartItem>>("Cart") ?? new List<CartItem>();
-        var cartCount = cartItems.Sum(i => i.Quantity);
-    }
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <!-- Nút hamburger cho mobile -->
-            <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#mainNavbar"
-                    aria-controls="mainNavbar" aria-expanded="false"
-                    aria-label="Mở menu điều hướng">
+            <!-- Logo Thương hiệu -->
+            <a class="navbar-brand navbar-brand-custom" asp-area="" asp-controller="Home" asp-action="Index">
+                <i class="fa-solid fa-leaf"></i>
+                <span>GreenFood</span>
+            </a>
+            
+            <!-- Nút Toggle trên thiết bị di động -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <!-- Các mục menu bên trái -->
-            <div class="collapse navbar-collapse" id="mainNavbar">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+            <!-- Menu nội dung chính -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Product" asp-action="Index" asp-area="">
-                            <i class="bi bi-house-door-fill me-1"></i> Trang chủ
-                        </a>
+                        <a class="nav-link nav-link-custom active" asp-area="" asp-controller="Home" asp-action="Index"><i class="fa-solid fa-house me-1"></i> Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Product" asp-action="Index"
-                           asp-route-categoryId="1" asp-area="">
-                            <i class="bi bi-leaf me-1"></i> Rau củ
-                        </a>
+                        <a class="nav-link nav-link-custom" asp-area="" asp-controller="Product" asp-action="Index"><i class="fa-solid fa-basket-shopping me-1"></i> Sản phẩm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Product" asp-action="Index"
-                           asp-route-categoryId="2" asp-area="">
-                            <i class="bi bi-apple me-1"></i> Trái cây
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Product" asp-action="Index"
-                           asp-route-categoryId="3" asp-area="">
-                            <i class="bi bi-egg-fried me-1"></i> Thịt & Hải sản
-                        </a>
+                        <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fa-solid fa-envelope me-1"></i> Liên hệ</a>
                     </li>
                 </ul>
-
-                <!-- Phần bên phải: Auth menu và Giỏ hàng -->
-                <ul class="navbar-nav align-items-center gap-1">
-                    <!-- Nút Giỏ hàng Session có Badge -->
-                    <li class="nav-item me-2">
-                        <a class="nav-link position-relative d-inline-flex align-items-center" asp-controller="Cart" asp-action="Index" asp-area="">
-                            <i class="bi bi-cart3 fs-5 me-1 text-success"></i>
-                            <span class="d-none d-lg-inline">Giỏ hàng</span>
-                            @if (cartCount > 0)
-                            {
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success" style="font-size: 0.65rem; transform: translate(-20%, -10%) !important;">
-                                    @cartCount
-                                </span>
-                            }
-                        </a>
-                    </li>
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        @* Hiển thị nút Admin Panel nếu là Admin *@
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-warning fw-bold"
-                                   asp-area="Admin" asp-controller="Product" asp-action="Index">
-                                    <i class="bi bi-shield-fill me-1"></i>Admin Panel
-                                </a>
-                            </li>
-                        }
-
-                        @* Dropdown thông tin tài khoản *@
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center gap-1"
-                               href="#" id="userDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <div class="rounded-circle bg-success d-flex align-items-center justify-content-center"
-                                     style="width:28px;height:28px;font-size:0.8rem;">
-                                    <i class="bi bi-person-fill text-white"></i>
-                                </div>
-                                @{
-                                    var currentUser = await UserManager.GetUserAsync(User);
-                                }
-                                <span class="d-none d-lg-inline">
-                                    @(currentUser?.FullName ?? User.Identity?.Name)
-                                </span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
-                                <li>
-                                    <h6 class="dropdown-header">
-                                        @(User.IsInRole("Admin") ? "🔴 Quản trị viên" : "🟢 Thành viên")
-                                    </h6>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Order" asp-action="Index" asp-area="">
-                                        <i class="bi bi-receipt me-2 text-success"></i>Đơn hàng của tôi
-                                    </a>
-                                </li>
-                                <li><hr class="dropdown-divider" /></li>
-                                <li>
-                                    <form asp-controller="Account" asp-action="Logout" asp-area="" method="post" class="px-3">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                                            <i class="bi bi-box-arrow-right me-1"></i>Đăng xuất
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    }
-                    else
-                    {
-                        @* Chưa đăng nhập: hiển thị nút Đăng nhập và Đăng ký *@
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Login" asp-area="">
-                                <i class="bi bi-box-arrow-in-right me-1"></i>Đăng nhập
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-success btn-sm ms-1"
-                               asp-controller="Account" asp-action="Register" asp-area="">
-                                <i class="bi bi-person-plus me-1"></i>Đăng ký
-                            </a>
-                        </li>
-                    }
-                </ul>
+                
+                <!-- Thanh tìm kiếm hiện đại -->
+                <form class="d-flex me-3" role="search">
+                    <div class="input-group">
+                        <input class="form-control search-box" type="search" placeholder="Tìm thực phẩm sạch..." aria-label="Search">
+                        <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+                
+                <!-- Nút Giỏ hàng (Cart Button) với Badge -->
+                <button class="cart-icon-btn" title="Giỏ hàng của bạn">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-badge">3</span>
+                </button>
             </div>
         </div>
     </nav>
 
-
-    <!-- ==================== NỘI DUNG CHÍNH ==================== -->
-    <!-- Khu vực hiển thị thông báo thành công (từ TempData) -->
-    <div class="container mt-3">
-        @if (TempData["SuccessMessage"] != null)
-        {
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                @TempData["SuccessMessage"]
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
-            </div>
-        }
-    </div>
-
-    <!-- Nội dung trang con được render tại đây -->
-    <main class="container my-4">
+    <!-- NỘI DUNG CHÍNH CỦA TỪNG TRANG -->
+    <main role="main" class="pb-3">
         @RenderBody()
     </main>
 
-    <!-- ==================== FOOTER ==================== -->
-    <!-- Footer tối màu (bg-dark), chia 3 cột responsive theo yêu cầu Bài 1 -->
-    <footer class="bg-dark text-white pt-5 pb-3 mt-5">
+    <!-- CHÂN TRANG (FOOTER - CHIA 3 CỘT TRÊN MÁY TÍNH, XẾP CHỒNG TRÊN DI ĐỘNG) -->
+    <footer class="footer-custom">
         <div class="container">
-            <div class="row">
-                <!-- Cột 1: Giới thiệu -->
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-success fw-bold">
-                        <i class="bi bi-leaf me-2"></i>Organic Food Store
-                    </h5>
-                    <p class="text-white-50">
-                        Chuyên cung cấp thực phẩm sạch, hữu cơ đạt tiêu chuẩn VietGAP.
-                        Cam kết 100% nguồn gốc rõ ràng, an toàn cho sức khỏe gia đình bạn.
-                    </p>
+            <div class="row g-4">
+                
+                <!-- Cột 1: Thông tin cửa hàng GreenFood -->
+                <div class="col-lg-4 col-md-12 col-12">
+                    <a class="footer-brand" href="#">
+                        <i class="fa-solid fa-leaf"></i>
+                        <span>GreenFood</span>
+                    </a>
+                    <p class="footer-desc">GreenFood là hệ thống phân phối thực phẩm hữu cơ, rau củ quả sạch chuẩn chất lượng VietGAP lớn nhất toàn quốc. Sứ mệnh của chúng tôi là bảo vệ sức khỏe người Việt qua từng bữa ăn sạch lành.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
                 </div>
-
-                <!-- Cột 2: Liên kết nhanh -->
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-success fw-bold">Liên kết nhanh</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2">
-                            <a asp-controller="Product" asp-action="Index" class="text-white-50 text-decoration-none">
-                                <i class="bi bi-chevron-right me-1"></i> Sản phẩm
-                            </a>
+                
+                <!-- Cột 2: Chính sách mua hàng -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <h4 class="footer-title">Chính Sách & Liên Kết</h4>
+                    <ul class="footer-links">
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Chính sách đổi trả trong 24h</a>
                         </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-white-50 text-decoration-none">
-                                <i class="bi bi-chevron-right me-1"></i> Giới thiệu
-                            </a>
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Chính sách vận chuyển & giao hàng</a>
                         </li>
-                        <li class="mb-2">
-                            <a href="#" class="text-white-50 text-decoration-none">
-                                <i class="bi bi-chevron-right me-1"></i> Liên hệ
-                            </a>
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Hướng dẫn mua hàng online</a>
+                        </li>
+                        <li class="footer-link-item">
+                            <a href="#" class="footer-link"><i class="fa-solid fa-angle-right me-2"></i>Cam kết chất lượng thực phẩm</a>
                         </li>
                     </ul>
                 </div>
-
-                <!-- Cột 3: Thông tin liên hệ -->
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-success fw-bold">Liên hệ</h5>
-                    <ul class="list-unstyled text-white-50">
-                        <li class="mb-2">
-                            <i class="bi bi-geo-alt-fill me-2 text-success"></i>
-                            254 Dương Đình Hội, TP.HCM
-                        </li>
-                        <li class="mb-2">
-                            <i class="bi bi-telephone-fill me-2 text-success"></i>
-                            0367346115
-                        </li>
-                        <li class="mb-2">
-                            <i class="bi bi-envelope-fill me-2 text-success"></i>
-                            info@organicfoodstore.vn
-                        </li>
-                    </ul>
+                
+                <!-- Cột 3: Liên hệ hỗ trợ -->
+                <div class="col-lg-4 col-md-6 col-12">
+                    <h4 class="footer-title">Thông Tin Liên Hệ</h4>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <p>276 Điện Biên Phủ, Phường 17, Quận Bình Thạnh, TP. Hồ Chí Minh (HUTECH Campus)</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <p>1900 123 456 - 028 3840 578</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>support@greenfood.vn - info@greenfood.vn</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fa-solid fa-clock"></i>
+                        <p>Giờ làm việc: 07:00 - 21:00 (Hằng ngày)</p>
+                    </div>
                 </div>
+                
             </div>
-
-            <!-- Dòng bản quyền -->
-            <hr class="border-secondary" />
-            <div class="text-center text-white-50">
-                <p class="mb-0">&copy; @DateTime.Now.Year Organic Food Store. Bài tập thực hành Lập trình Web.</p>
+            
+            <!-- Phần Bản quyền ở đáy Footer -->
+            <div class="footer-bottom">
+                <p class="m-0">&copy; 2026 GreenFood Organic Store. Tất cả quyền được bảo lưu. Thiết kế và phát triển bởi Đồ án Lập trình Web HUTECH.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Bootstrap 5 JavaScript Bundle từ CDN chính thức -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-            crossorigin="anonymous"></script>
-
-    <!-- Render các section script từ trang con (nếu có) -->
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

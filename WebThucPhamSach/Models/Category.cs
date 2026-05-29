@@ -1,18 +1,18 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebThucPhamSach.Models
+namespace webthucphamsach.Models
 {
-    /// <summary>
-    /// Lớp Model đại diện cho Danh mục sản phẩm (Rau củ, Trái cây, Thịt tươi,...).
-    /// </summary>
     public class Category
     {
-        // Mã danh mục - Khóa chính
+        [Display(Name = "Mã danh mục")]
         public int Id { get; set; }
 
-        // Tên danh mục - Bắt buộc nhập
-        [Required(ErrorMessage = "Vui lòng nhập tên danh mục")]
+        [Required(ErrorMessage = "Tên danh mục không được để trống")]
+        [StringLength(100, ErrorMessage = "Tên danh mục không được vượt quá 100 ký tự")]
         [Display(Name = "Tên danh mục")]
         public string Name { get; set; } = string.Empty;
+
+        // Thuộc tính điều hướng thiết lập quan hệ 1-nhiều
+        public List<Product>? Products { get; set; }
     }
 }

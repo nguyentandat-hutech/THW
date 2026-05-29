@@ -1,26 +1,13 @@
-namespace WebThucPhamSach.Repositories
-{
-    using WebThucPhamSach.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using webthucphamsach.Models;
 
-    /// <summary>
-    /// Interface định nghĩa các phương thức CRUD cho Danh mục.
-    /// Sử dụng Repository Pattern để tách biệt logic truy cập dữ liệu.
-    /// </summary>
+namespace webthucphamsach.Repositories
+{
     public interface ICategoryRepository
     {
-        // Lấy danh sách tất cả danh mục
-        IEnumerable<Category> GetAll();
-
-        // Lấy thông tin danh mục theo mã Id
-        Category? GetById(int id);
-
-        // Thêm mới một danh mục
-        void Add(Category category);
-
-        // Cập nhật thông tin danh mục
-        void Update(Category category);
-
-        // Xóa danh mục theo mã Id
-        void Delete(int id);
+        Task<IEnumerable<Category>> GetAllAsync();
+        Task<Category?> GetByIdAsync(int id);
+        Task AddAsync(Category category);
     }
 }

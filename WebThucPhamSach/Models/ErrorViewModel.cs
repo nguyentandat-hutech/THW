@@ -1,4 +1,4 @@
-namespace WebThucPhamSach.Models;
+namespace webthucphamsach.Models;
 
 public class ErrorViewModel
 {

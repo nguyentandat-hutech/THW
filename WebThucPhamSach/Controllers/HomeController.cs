@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using WebThucPhamSach.Models;
+using webthucphamsach.Models;
 
-namespace WebThucPhamSach.Controllers;
+namespace webthucphamsach.Controllers;
 
 public class HomeController : Controller
 {
