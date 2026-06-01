@@ -11,6 +11,103 @@
     <!-- Style CSS Tùy Chỉnh -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/webthucphamsach.styles.css" asp-append-version="true" />
+    <style>
+        /* Auth buttons trong navbar */
+        .btn-register-nav {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 16px;
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.6);
+            border-radius: 20px;
+            color: white !important;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .btn-register-nav:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: white;
+            transform: translateY(-1px);
+        }
+        .btn-login-nav {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 18px;
+            background: rgba(255,255,255,0.2);
+            border: 1.5px solid rgba(255,255,255,0.7);
+            border-radius: 20px;
+            color: white !important;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        .btn-login-nav:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-logout {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 16px;
+            background: rgba(244, 67, 54, 0.15);
+            border: 1.5px solid rgba(244, 67, 54, 0.5);
+            border-radius: 20px;
+            color: #ffcdd2 !important;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-logout:hover {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #ef9a9a;
+            color: white !important;
+            transform: translateY(-1px);
+        }
+        .user-greeting {
+            color: white;
+            font-size: 0.85rem;
+        }
+        .user-avatar {
+            font-size: 1.4rem;
+            color: rgba(255,255,255,0.9);
+        }
+        .user-name {
+            font-weight: 600;
+            color: rgba(255,255,255,0.95);
+            font-size: 0.85rem;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+        }
+        .btn-admin-nav {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            background: rgba(255, 235, 59, 0.2);
+            border: 1.5px solid rgba(255, 235, 59, 0.6);
+            border-radius: 15px;
+            color: #fff9c4 !important;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .btn-admin-nav:hover {
+            background: rgba(255, 235, 59, 0.35);
+            color: #ffee58 !important;
+        }
+    </style>
 </head>
 <body>
     <!-- THÀNH MENU ĐIỀU HƯỚNG (NAVBAR) -->
@@ -39,6 +136,14 @@
                     <li class="nav-item">
                         <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="fa-solid fa-envelope me-1"></i> Liên hệ</a>
                     </li>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item ms-2">
+                            <a class="btn-admin-nav" asp-area="Admin" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-screwdriver-wrench me-1"></i> Quản trị
+                            </a>
+                        </li>
+                    }
                 </ul>
                 
                 <!-- Thanh tìm kiếm hiện đại -->
@@ -54,6 +159,9 @@
                     <i class="fa-solid fa-cart-shopping"></i>
                     <span class="cart-badge">3</span>
                 </button>
+
+                <!-- Partial Đăng nhập / Đăng xuất -->
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>

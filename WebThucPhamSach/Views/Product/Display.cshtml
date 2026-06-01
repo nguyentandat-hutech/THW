@@ -61,15 +61,15 @@
                         </div>
                     </div>
 
-                    <!-- Các nút hành động quản lý -->
-                    <div class="mt-auto pt-3 d-flex gap-3">
-                        <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning text-white rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
-                            <i class="fa-solid fa-pen-to-square"></i>
-                            <span>Chỉnh Sửa</span>
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
-                            <i class="fa-solid fa-trash-can"></i>
-                            <span>Xóa Mặt Hàng</span>
+                    <!-- Các nút hành động dành cho khách hàng -->
+                    <div class="mt-auto pt-3 d-flex flex-wrap gap-3">
+                        <button class="btn btn-success rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2 btn-add-cart" id="btn-add-to-cart">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            <span>Thêm vào giỏ hàng</span>
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
+                            <i class="fa-solid fa-arrow-left"></i>
+                            <span>Quay lại danh sách</span>
                         </a>
                     </div>
                 </div>

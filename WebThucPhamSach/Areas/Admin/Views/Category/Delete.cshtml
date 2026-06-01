@@ -1,0 +1,74 @@
+@model webthucphamsach.Models.Category
+@{
+    ViewData["Title"] = "Xóa danh mục | Admin";
+    int productCount = ViewBag.ProductCount ?? 0;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+        <div class="admin-card">
+            <div class="admin-card-header" style="background:linear-gradient(135deg,#b71c1c,#c62828); color:white;">
+                <i class="fa-solid fa-triangle-exclamation me-2"></i>Xác nhận Xóa Danh mục
+            </div>
+            <div class="p-4">
+                <p style="color:#555; font-size:0.92rem; line-height:1.7;">
+                    Bạn có chắc chắn muốn xóa danh mục <strong>"@Model.Name"</strong> không?
+                </p>
+
+                @if (productCount > 0)
+                {
+                    <div class="alert alert-warning border-0 rounded-3" style="background:#fff8e1; border-left:4px solid #f9a825 !important;">
+                        <i class="fa-solid fa-triangle-exclamation me-2 text-warning"></i>
+                        <strong>Cảnh báo:</strong> Danh mục này đang có <strong>@productCount sản phẩm</strong>.
+                        Hãy chuyển hoặc xóa các sản phẩm trước khi xóa danh mục.
+                    </div>
+                }
+
+                <div style="background:#fff8e1; border:1px solid #ffe082; border-radius:12px; padding:16px; margin-bottom:20px;">
+                    <div class="d-flex align-items-center gap-3">
+                        <div style="width:44px;height:44px;background:#e8f5e9;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#2e7d32;font-size:1.1rem;">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight:700; color:#1a1a2e;">@Model.Name</div>
+                            <div style="font-size:0.78rem; color:#888;">@productCount sản phẩm thuộc danh mục này</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-area="Admin" asp-controller="Category" asp-action="Delete"
+                      asp-route-id="@Model.Id" method="post" id="deleteCategoryForm">
+                    <div class="d-flex gap-3">
+                        @if (productCount == 0)
+                        {
+                            <button type="submit" class="btn-danger-confirm" id="confirmDeleteBtn">
+                                <i class="fa-solid fa-trash me-2"></i>Xóa vĩnh viễn
+                            </button>
+                        }
+                        <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn-admin-cancel">
+                            <i class="fa-solid fa-arrow-left me-2"></i>Quay lại
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); overflow: hidden; }
+    .admin-card-header { padding: 18px 24px; font-weight: 700; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.15); }
+    .btn-danger-confirm {
+        display: inline-flex; align-items: center; padding: 11px 24px;
+        background: linear-gradient(135deg, #b71c1c, #c62828);
+        color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 0.9rem;
+        cursor: pointer; transition: all 0.3s;
+    }
+    .btn-danger-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(198,40,40,0.4); }
+    .btn-admin-cancel {
+        display: inline-flex; align-items: center; padding: 11px 22px;
+        background: #f5f5f5; color: #555; border: 1.5px solid #ddd;
+        border-radius: 10px; font-weight: 600; font-size: 0.9rem; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-admin-cancel:hover { background: #eee; color: #333; }
+</style>

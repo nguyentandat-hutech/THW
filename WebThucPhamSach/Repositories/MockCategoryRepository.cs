@@ -35,5 +35,18 @@ namespace webthucphamsach.Repositories
             _categories.Add(category);
             await Task.CompletedTask;
         }
+        public async Task UpdateAsync(Category category)
+        {
+            var existing = _categories.FirstOrDefault(c => c.Id == category.Id);
+            if (existing != null) existing.Name = category.Name;
+            await Task.CompletedTask;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var category = _categories.FirstOrDefault(c => c.Id == id);
+            if (category != null) _categories.Remove(category);
+            await Task.CompletedTask;
+        }
     }
 }

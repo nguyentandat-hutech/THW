@@ -1,90 +1,331 @@
 @model IEnumerable<webthucphamsach.Models.Product>
 
 @{
-    ViewData["Title"] = "Quản Lý Thực Phẩm Sạch";
+    ViewData["Title"] = "Sản Phẩm Thực Phẩm Sạch";
     var categories = ViewBag.Categories as Dictionary<int, string> ?? new Dictionary<int, string>();
 }
 
-<div class="container mt-4 animate-fade-in">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
-        <div>
-            <span class="text-success fw-bold text-uppercase letter-spacing-1" style="font-size: 0.85rem;">Hệ Thống Quản Trị</span>
-            <h1 class="h2 fw-bold text-dark m-0">Quản Lý Kho Thực Phẩm Sạch</h1>
+<!-- BANNER TRANG SẢN PHẨM -->
+<section class="shop-banner">
+    <div class="container">
+        <div class="shop-banner-inner">
+            <div>
+                <p class="shop-banner-label"><i class="fa-solid fa-seedling me-2"></i>GreenFood Organic Store</p>
+                <h1 class="shop-banner-title">Thực Phẩm Sạch & Hữu Cơ</h1>
+                <p class="shop-banner-sub">Tươi ngon mỗi ngày — Chuẩn VietGAP — Giao tận nhà</p>
+            </div>
+            <div class="shop-banner-badges">
+                <span class="shop-badge"><i class="fa-solid fa-leaf me-1"></i>100% Hữu cơ</span>
+                <span class="shop-badge"><i class="fa-solid fa-truck-fast me-1"></i>Giao nhanh 2h</span>
+                <span class="shop-badge"><i class="fa-solid fa-shield-heart me-1"></i>An toàn tuyệt đối</span>
+            </div>
         </div>
-        <a asp-action="Add" class="btn btn-hero btn-sm px-4 py-2 d-inline-flex align-items-center gap-2">
-            <i class="fa-solid fa-plus-circle"></i>
-            <span>Thêm Thực Phẩm Mới</span>
-        </a>
     </div>
+</section>
 
-    <!-- Bảng Danh Sách Sản Phẩm Premium -->
-    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0" style="min-width: 800px;">
-                <thead class="table-success text-success" style="background-color: var(--primary-light); border-bottom: 2px solid #d0ebd4;">
-                    <tr>
-                        <th class="py-3 px-4 text-center" style="width: 80px;">Hình ảnh</th>
-                        <th class="py-3 px-3">Tên thực phẩm</th>
-                        <th class="py-3 px-3">Danh mục</th>
-                        <th class="py-3 px-3 text-end" style="width: 150px;">Giá bán</th>
-                        <th class="py-3 px-3 text-center" style="width: 250px;">Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model != null && Model.Any())
-                    {
-                        foreach (var product in Model)
-                        {
-                            <tr>
-                                <!-- Hình ảnh thu nhỏ -->
-                                <td class="px-4 text-center">
-                                    <div class="rounded-3 overflow-hidden border" style="width: 60px; height: 60px; background-color: #f8f9fa;">
-                                        <img src="@product.ImageUrl" alt="@product.Name" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null;this.src='https://placehold.co/100x100?text=Food';" />
-                                    </div>
-                                </td>
-                                <!-- Tên & mô tả ngắn -->
-                                <td class="px-3">
-                                    <h6 class="fw-bold text-dark mb-1">@product.Name</h6>
-                                    <p class="text-muted mb-0 small text-truncate" style="max-width: 300px;">@product.Description</p>
-                                </td>
-                                <!-- Danh mục -->
-                                <td class="px-3">
-                                    <span class="badge rounded-pill bg-light text-success border border-success-subtle px-3 py-2 fw-semibold">
+<!-- LƯỚI SẢN PHẨM -->
+<section class="shop-section">
+    <div class="container">
+
+        <!-- Tiêu đề section -->
+        <div class="section-header">
+            <h2 class="section-title">Tất Cả Sản Phẩm</h2>
+            <span class="section-count">@Model.Count() sản phẩm</span>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-4">
+                @foreach (var product in Model)
+                {
+                    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+                        <div class="product-card">
+                            <!-- Ảnh sản phẩm -->
+                            <a asp-action="Display" asp-route-id="@product.Id" class="product-card-img-link">
+                                <div class="product-card-img-wrap">
+                                    <img src="@product.ImageUrl"
+                                         alt="@product.Name"
+                                         class="product-card-img"
+                                         onerror="this.onerror=null;this.src='https://placehold.co/400x300?text=GreenFood';" />
+                                    <!-- Badge danh mục -->
+                                    <span class="product-category-badge">
                                         @(categories.ContainsKey(product.CategoryId) ? categories[product.CategoryId] : "Khác")
                                     </span>
-                                </td>
-                                <!-- Giá bán -->
-                                <td class="px-3 text-end fw-bold text-success fs-5">
-                                    @product.Price.ToString("N0") <span class="fs-6 fw-normal text-muted">đ</span>
-                                </td>
-                                <!-- Các nút điều hướng CRUD -->
-                                <td class="px-3 text-center">
-                                    <div class="d-inline-flex gap-2">
-                                        <a asp-action="Display" asp-route-id="@product.Id" class="btn btn-sm btn-light border text-primary rounded-3 px-3 py-2" title="Chi tiết">
-                                            <i class="fa-solid fa-eye me-1"></i> Xem
-                                        </a>
-                                        <a asp-action="Update" asp-route-id="@product.Id" class="btn btn-sm btn-light border text-warning rounded-3 px-3 py-2" title="Sửa">
-                                            <i class="fa-solid fa-pen me-1"></i> Sửa
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm btn-light border text-danger rounded-3 px-3 py-2" title="Xóa">
-                                            <i class="fa-solid fa-trash me-1"></i> Xóa
-                                        </a>
+                                    <!-- Overlay khi hover -->
+                                    <div class="product-overlay">
+                                        <span class="overlay-text"><i class="fa-solid fa-eye me-1"></i>Xem chi tiết</span>
                                     </div>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr>
-                            <td colspan="5" class="py-5 text-center text-muted">
-                                <i class="fa-solid fa-box-open fa-3x mb-3 text-success" style="opacity: 0.3;"></i>
-                                <p class="mb-0">Kho hàng hiện tại trống. Hãy thêm thực phẩm mới!</p>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                                </div>
+                            </a>
+
+                            <!-- Thông tin sản phẩm -->
+                            <div class="product-card-body">
+                                <h3 class="product-card-name">
+                                    <a asp-action="Display" asp-route-id="@product.Id">@product.Name</a>
+                                </h3>
+
+                                @if (!string.IsNullOrEmpty(product.Description))
+                                {
+                                    <p class="product-card-desc">
+                                        @(product.Description.Length > 70 ? product.Description.Substring(0, 70) + "..." : product.Description)
+                                    </p>
+                                }
+
+                                <div class="product-card-footer">
+                                    <span class="product-price">@product.Price.ToString("N0")<span class="price-unit">đ</span></span>
+                                    <a asp-action="Display" asp-route-id="@product.Id" class="btn-view-detail">
+                                        <i class="fa-solid fa-basket-shopping"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="empty-state">
+                <i class="fa-solid fa-box-open"></i>
+                <h3>Chưa có sản phẩm nào</h3>
+                <p>Hãy quay lại sau, chúng tôi đang cập nhật thêm sản phẩm mới!</p>
+            </div>
+        }
     </div>
-</div>
+</section>
+
+<style>
+    /* ===== SHOP BANNER ===== */
+    .shop-banner {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+        padding: 50px 0 40px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .shop-banner::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 400px;
+        height: 400px;
+        background: rgba(255,255,255,0.04);
+        border-radius: 50%;
+    }
+    .shop-banner-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    .shop-banner-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        opacity: 0.8;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin: 0 0 8px;
+    }
+    .shop-banner-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0 0 8px;
+        letter-spacing: -0.5px;
+    }
+    .shop-banner-sub {
+        font-size: 0.95rem;
+        opacity: 0.85;
+        margin: 0;
+    }
+    .shop-banner-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    .shop-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 16px;
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.3);
+        border-radius: 30px;
+        font-size: 0.82rem;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+        white-space: nowrap;
+    }
+
+    /* ===== SHOP SECTION ===== */
+    .shop-section {
+        padding: 50px 0 60px;
+        background: #f8fdf8;
+    }
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        padding-bottom: 16px;
+        border-bottom: 2px solid #e8f5e9;
+    }
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1b5e20;
+        margin: 0;
+    }
+    .section-count {
+        background: #e8f5e9;
+        color: #2e7d32;
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border: 1px solid #c8e6c9;
+    }
+
+    /* ===== PRODUCT CARD ===== */
+    .product-card {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 40px rgba(46,125,50,0.15);
+    }
+    .product-card-img-link { display: block; text-decoration: none; }
+    .product-card-img-wrap {
+        position: relative;
+        overflow: hidden;
+        height: 210px;
+        background: #f1f8e9;
+    }
+    .product-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    .product-card:hover .product-card-img { transform: scale(1.07); }
+
+    .product-category-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(46,125,50,0.9);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.72rem;
+        font-weight: 700;
+        backdrop-filter: blur(4px);
+        letter-spacing: 0.3px;
+    }
+    .product-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(27,94,32,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .product-card:hover .product-overlay { opacity: 1; }
+    .overlay-text {
+        color: white;
+        font-weight: 700;
+        font-size: 0.9rem;
+        background: rgba(255,255,255,0.2);
+        padding: 10px 20px;
+        border-radius: 30px;
+        border: 1.5px solid rgba(255,255,255,0.5);
+    }
+
+    .product-card-body {
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 8px;
+    }
+    .product-card-name {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0;
+        line-height: 1.4;
+    }
+    .product-card-name a {
+        color: #1a3a1a;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+    .product-card-name a:hover { color: #2e7d32; }
+    .product-card-desc {
+        font-size: 0.82rem;
+        color: #888;
+        margin: 0;
+        line-height: 1.5;
+        flex: 1;
+    }
+    .product-card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 8px;
+        padding-top: 12px;
+        border-top: 1px solid #f0f4f0;
+    }
+    .product-price {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #e65100;
+    }
+    .price-unit {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #999;
+        margin-left: 2px;
+    }
+    .btn-view-detail {
+        width: 38px;
+        height: 38px;
+        background: linear-gradient(135deg, #2e7d32, #43a047);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(46,125,50,0.3);
+    }
+    .btn-view-detail:hover {
+        transform: scale(1.15) rotate(5deg);
+        box-shadow: 0 6px 18px rgba(46,125,50,0.45);
+        color: white;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: #aaa;
+    }
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        color: #c8e6c9;
+    }
+    .empty-state h3 { color: #666; font-weight: 700; }
+    .empty-state p { font-size: 0.95rem; }
+</style>

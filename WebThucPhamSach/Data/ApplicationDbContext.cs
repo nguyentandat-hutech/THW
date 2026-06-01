@@ -1,9 +1,14 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using webthucphamsach.Models;
 
 namespace webthucphamsach.Data
 {
-    public class ApplicationDbContext : DbContext
+    /// <summary>
+    /// ApplicationDbContext kế thừa từ IdentityDbContext để tích hợp
+    /// ASP.NET Core Identity với ApplicationUser tùy chỉnh.
+    /// </summary>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -15,9 +20,10 @@ namespace webthucphamsach.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // BẮT BUỘC gọi base để Identity tạo đủ các bảng cần thiết
             base.OnModelCreating(modelBuilder);
 
-            // Cấu hình quan hệ 1-nhiều
+            // Cấu hình quan hệ 1-nhiều giữa Product và Category
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)

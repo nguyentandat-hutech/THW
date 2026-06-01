@@ -1,0 +1,172 @@
+@page
+@model webthucphamsach.Areas.Identity.Pages.Account.LoginModel
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - GreenFood Organic Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a3d0a 0%, #1a6b1a 40%, #2d8c2d 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 15px;
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+            overflow: hidden;
+            width: 100%;
+            max-width: 460px;
+        }
+        .auth-header {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32, #388e3c);
+            padding: 35px 30px;
+            text-align: center;
+            color: white;
+        }
+        .auth-header .brand-icon {
+            width: 65px;
+            height: 65px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        .auth-header h1 { font-size: 1.6rem; font-weight: 700; margin: 0; }
+        .auth-header p { font-size: 0.9rem; opacity: 0.85; margin: 8px 0 0; }
+        .auth-body { padding: 35px 40px; }
+        .form-label { font-weight: 600; color: #2e7d32; font-size: 0.88rem; margin-bottom: 6px; }
+        .form-control {
+            border: 1.5px solid #c8e6c9; border-radius: 10px;
+            padding: 11px 15px; font-size: 0.95rem; transition: all 0.3s ease; background: #f9fbe7;
+        }
+        .form-control:focus {
+            border-color: #2e7d32; box-shadow: 0 0 0 3px rgba(46,125,50,0.15);
+            background: #fff; outline: none;
+        }
+        .input-group-text {
+            background: #e8f5e9; border: 1.5px solid #c8e6c9;
+            border-right: none; border-radius: 10px 0 0 10px; color: #2e7d32;
+        }
+        .input-group .form-control { border-left: none; border-radius: 0 10px 10px 0; }
+        .btn-login {
+            background: linear-gradient(135deg, #2e7d32, #43a047);
+            border: none; border-radius: 12px; color: white; font-weight: 700;
+            font-size: 1rem; padding: 13px; width: 100%; transition: all 0.3s ease;
+            letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(46,125,50,0.35);
+        }
+        .btn-login:hover {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            transform: translateY(-2px); box-shadow: 0 8px 25px rgba(46,125,50,0.45); color: white;
+        }
+        .text-danger { font-size: 0.8rem; margin-top: 4px; }
+        .register-link {
+            text-align: center; margin-top: 20px; padding-top: 20px;
+            border-top: 1px solid #e8f5e9; font-size: 0.9rem; color: #666;
+        }
+        .register-link a { color: #2e7d32; font-weight: 600; text-decoration: none; }
+        .register-link a:hover { color: #1b5e20; text-decoration: underline; }
+        .back-home { text-align: center; margin-top: 15px; }
+        .back-home a { color: #2e7d32; text-decoration: none; font-size: 0.88rem; font-weight: 500; }
+        .back-home a:hover { color: #1b5e20; }
+        .validation-summary-errors {
+            background: #ffebee; border: 1px solid #ffcdd2; border-radius: 10px;
+            padding: 12px 16px; color: #c62828; font-size: 0.88rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+                <h1>GreenFood</h1>
+                <p>Đăng nhập vào tài khoản thực phẩm sạch của bạn</p>
+            </div>
+
+            <div class="auth-body">
+                <form id="account" method="post">
+                    <div asp-validation-summary="ModelOnly" class="validation-summary-errors mb-4" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label">
+                            <i class="fa-solid fa-envelope me-1"></i>Email
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-at"></i></span>
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username"
+                                   placeholder="example@email.com" id="Input_Email" />
+                        </div>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Input.Password" class="form-label">
+                            <i class="fa-solid fa-lock me-1"></i>Mật khẩu
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fa-solid fa-key"></i></span>
+                            <input asp-for="Input.Password" class="form-control" autocomplete="current-password"
+                                   placeholder="Nhập mật khẩu" id="Input_Password" />
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input asp-for="Input.RememberMe" class="form-check-input" id="Input_RememberMe" />
+                            <label asp-for="Input.RememberMe" class="form-check-label" style="color:#555; font-size:0.9rem;">
+                                Ghi nhớ đăng nhập
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="login-submit" type="submit" class="btn btn-login">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>Đăng Nhập
+                    </button>
+                </form>
+
+                <div class="register-link">
+                    Chưa có tài khoản?
+                    <a id="register-link" asp-page="./Register">
+                        Đăng ký ngay tại đây
+                    </a>
+                </div>
+
+                <div class="back-home">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="fa-solid fa-arrow-left me-1"></i>Quay về Trang chủ GreenFood
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

@@ -1,0 +1,285 @@
+@model IEnumerable<webthucphamsach.Models.Product>
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm | Admin";
+    var categories = ViewBag.Categories as Dictionary<int, string>;
+}
+
+<div class="admin-panel">
+    <!-- Header Quản trị -->
+    <div class="admin-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="admin-title">
+                        <i class="fa-solid fa-box-archive me-2"></i>Quản lý Sản phẩm
+                    </h1>
+                    <p class="admin-subtitle">Thực phẩm sạch GreenFood — Bảng điều khiển Admin</p>
+                </div>
+                <a asp-area="Admin" asp-controller="Product" asp-action="Add" class="btn-admin-add" id="btn-add-product">
+                    <i class="fa-solid fa-plus me-2"></i>Thêm sản phẩm mới
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4">
+        <!-- Thông báo thành công -->
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show admin-alert-success" role="alert">
+                <i class="fa-solid fa-circle-check me-2"></i>@TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <!-- Thống kê nhanh -->
+        <div class="row g-3 mb-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-green">
+                    <div class="stat-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-number">@Model.Count()</div>
+                        <div class="stat-label">Tổng sản phẩm</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-blue">
+                    <div class="stat-icon"><i class="fa-solid fa-tags"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-number">@(categories?.Count ?? 0)</div>
+                        <div class="stat-label">Danh mục</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-orange">
+                    <div class="stat-icon"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-number">@Model.Count(p => p.Price > 100000)</div>
+                        <div class="stat-label">Sản phẩm cao cấp</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-purple">
+                    <div class="stat-icon"><i class="fa-solid fa-money-bill-wave"></i></div>
+                    <div class="stat-info">
+                        <div class="stat-number">@String.Format("{0:N0}", Model.Sum(p => p.Price))đ</div>
+                        <div class="stat-label">Tổng giá trị</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng sản phẩm -->
+        <div class="admin-table-card">
+            <div class="table-responsive">
+                <table class="table admin-table" id="productsTable">
+                    <thead>
+                        <tr>
+                            <th width="60">#</th>
+                            <th width="80">Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá bán</th>
+                            <th width="160">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="fa-solid fa-box-open text-muted" style="font-size:3rem;"></i>
+                                    <p class="text-muted mt-3">Chưa có sản phẩm nào. Hãy thêm sản phẩm đầu tiên!</p>
+                                    <a asp-area="Admin" asp-controller="Product" asp-action="Add" class="btn btn-success">
+                                        <i class="fa-solid fa-plus me-1"></i>Thêm ngay
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            int stt = 1;
+                            foreach (var product in Model)
+                            {
+                                <tr>
+                                    <td class="text-muted fw-bold">@stt</td>
+                                    <td>
+                                        <img src="@product.ImageUrl"
+                                             alt="@product.Name"
+                                             class="admin-product-img"
+                                             onerror="this.src='/images/default-food.jpg'" />
+                                    </td>
+                                    <td>
+                                        <div class="product-name-cell">
+                                            <span class="product-name-text">@product.Name</span>
+                                            @if (!string.IsNullOrEmpty(product.Description))
+                                            {
+                                                <small class="product-desc-preview">
+                                                    @(product.Description.Length > 60 ? product.Description.Substring(0, 60) + "..." : product.Description)
+                                                </small>
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="category-badge">
+                                            @(categories != null && categories.ContainsKey(product.CategoryId) ? categories[product.CategoryId] : "N/A")
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="price-text">@String.Format("{0:N0}", product.Price)đ</span>
+                                    </td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="Update"
+                                               asp-route-id="@product.Id"
+                                               class="btn-action btn-edit"
+                                               title="Chỉnh sửa">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="Delete"
+                                               asp-route-id="@product.Id"
+                                               class="btn-action btn-delete"
+                                               title="Xóa">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                stt++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-panel { background: #f0f4f0; min-height: calc(100vh - 180px); }
+
+    .admin-header {
+        background: linear-gradient(135deg, #1b5e20, #2e7d32, #388e3c);
+        padding: 30px 0;
+        color: white;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .admin-title { font-size: 1.8rem; font-weight: 800; margin: 0; letter-spacing: -0.5px; }
+    .admin-subtitle { font-size: 0.88rem; opacity: 0.8; margin: 5px 0 0; }
+
+    .btn-admin-add {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        background: rgba(255,255,255,0.2);
+        border: 2px solid rgba(255,255,255,0.7);
+        border-radius: 12px;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        backdrop-filter: blur(5px);
+    }
+    .btn-admin-add:hover {
+        background: rgba(255,255,255,0.35);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        transition: transform 0.2s;
+        border-left: 5px solid transparent;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-green { border-left-color: #2e7d32; }
+    .stat-blue { border-left-color: #1565c0; }
+    .stat-orange { border-left-color: #e65100; }
+    .stat-purple { border-left-color: #6a1b9a; }
+    .stat-icon { font-size: 2rem; opacity: 0.7; }
+    .stat-green .stat-icon { color: #2e7d32; }
+    .stat-blue .stat-icon { color: #1565c0; }
+    .stat-orange .stat-icon { color: #e65100; }
+    .stat-purple .stat-icon { color: #6a1b9a; }
+    .stat-number { font-size: 1.6rem; font-weight: 800; color: #1a1a2e; }
+    .stat-label { font-size: 0.82rem; color: #777; font-weight: 500; }
+
+    .admin-table-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .admin-table { margin: 0; }
+    .admin-table thead { background: linear-gradient(135deg, #1b5e20, #2e7d32); }
+    .admin-table thead th { color: white; font-weight: 700; font-size: 0.85rem; padding: 16px 20px; border: none; letter-spacing: 0.5px; }
+    .admin-table tbody tr { border-bottom: 1px solid #f0f4f0; transition: background 0.2s; }
+    .admin-table tbody tr:hover { background: #f1f8e9; }
+    .admin-table tbody td { padding: 14px 20px; vertical-align: middle; font-size: 0.9rem; color: #333; border: none; }
+
+    .admin-product-img {
+        width: 55px;
+        height: 55px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+
+    .product-name-cell { display: flex; flex-direction: column; gap: 3px; }
+    .product-name-text { font-weight: 700; color: #1a3a1a; font-size: 0.92rem; }
+    .product-desc-preview { color: #888; font-size: 0.78rem; }
+
+    .category-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #e8f5e9;
+        color: #2e7d32;
+        border-radius: 20px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        border: 1px solid #c8e6c9;
+    }
+
+    .price-text { font-weight: 800; color: #e65100; font-size: 0.95rem; }
+
+    .action-buttons { display: flex; gap: 8px; }
+    .btn-action {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+    .btn-edit { background: #e3f2fd; color: #1565c0; }
+    .btn-edit:hover { background: #1565c0; color: white; transform: scale(1.1); }
+    .btn-delete { background: #ffebee; color: #c62828; }
+    .btn-delete:hover { background: #c62828; color: white; transform: scale(1.1); }
+
+    .admin-alert-success {
+        border-radius: 12px;
+        border-left: 5px solid #2e7d32;
+        background: #e8f5e9;
+        color: #1b5e20;
+        border-color: #c8e6c9;
+    }
+</style>
