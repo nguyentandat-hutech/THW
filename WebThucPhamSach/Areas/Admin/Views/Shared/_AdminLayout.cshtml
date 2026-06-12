@@ -236,6 +236,13 @@
                     <span>Danh mục</span>
                 </a>
             </li>
+            <li class="sidebar-nav-item">
+                <a asp-area="Admin" asp-controller="Order" asp-action="Index"
+                   class="sidebar-nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Order" ? "active" : "")">
+                    <span class="nav-icon"><i class="fa-solid fa-truck-fast"></i></span>
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
         </ul>
     </nav>
 

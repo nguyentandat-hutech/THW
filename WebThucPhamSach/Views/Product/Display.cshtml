@@ -61,19 +61,48 @@
                         </div>
                     </div>
 
-                    <!-- Các nút hành động dành cho khách hàng -->
-                    <div class="mt-auto pt-3 d-flex flex-wrap gap-3">
-                        <button class="btn btn-success rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2 btn-add-cart" id="btn-add-to-cart">
-                            <i class="fa-solid fa-cart-plus"></i>
-                            <span>Thêm vào giỏ hàng</span>
-                        </button>
-                        <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
-                            <i class="fa-solid fa-arrow-left"></i>
-                            <span>Quay lại danh sách</span>
-                        </a>
+                    <div class="mt-auto pt-3">
+                        <form asp-controller="ShoppingCart" asp-action="AddToCart" method="get" class="d-flex flex-wrap align-items-center gap-3">
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            
+                            <div class="d-flex align-items-center bg-light border rounded-3 overflow-hidden" style="height: 44px;">
+                                <button type="button" class="btn border-0 px-3 h-100" onclick="decrementQuantity()"><i class="fa-solid fa-minus"></i></button>
+                                <input type="number" id="quantity" name="quantity" value="1" class="form-control border-0 bg-transparent text-center fw-bold" style="width: 50px; font-size: 1.1rem; box-shadow: none;" min="1" max="100" />
+                                <button type="button" class="btn border-0 px-3 h-100" onclick="incrementQuantity()"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+
+                            <button type="submit" class="btn btn-success rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2" style="height: 44px;">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Thêm vào giỏ hàng</span>
+                            </button>
+                            
+                            <a asp-action="Index" class="btn btn-outline-secondary rounded-3 px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2" style="height: 44px;">
+                                <i class="fa-solid fa-arrow-left"></i>
+                                <span>Quay lại danh sách</span>
+                            </a>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function incrementQuantity() {
+            var input = document.getElementById('quantity');
+            var val = parseInt(input.value);
+            if (!isNaN(val) && val < 100) {
+                input.value = val + 1;
+            }
+        }
+        function decrementQuantity() {
+            var input = document.getElementById('quantity');
+            var val = parseInt(input.value);
+            if (!isNaN(val) && val > 1) {
+                input.value = val - 1;
+            }
+        }
+    </script>
+}

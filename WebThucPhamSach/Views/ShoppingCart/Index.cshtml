@@ -1,0 +1,164 @@
+@model webthucphamsach.Models.ShoppingCart
+
+@{
+    ViewData["Title"] = "Giỏ Hàng";
+}
+
+<div class="container my-5 animate-fade-in">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-success"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Giỏ hàng</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+            <h2 class="section-title"><i class="fa-solid fa-cart-shopping me-2"></i>Giỏ hàng của bạn</h2>
+        </div>
+    </div>
+
+    <!-- Thông báo thành công / lỗi -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-circle-check fs-4 me-2 text-success"></i>
+                <div>@TempData["SuccessMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm rounded-3 mb-4" role="alert">
+            <div class="d-flex align-items-center">
+                <i class="fa-solid fa-circle-exclamation fs-4 me-2 text-danger"></i>
+                <div>@TempData["ErrorMessage"]</div>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (Model.Items.Count == 0)
+    {
+        <div class="text-center py-5 shadow-sm rounded-4 bg-white border border-light">
+            <div class="mb-4">
+                <i class="fa-solid fa-basket-shopping text-muted" style="font-size: 5rem; opacity: 0.3;"></i>
+            </div>
+            <h4 class="text-secondary fw-semibold">Giỏ hàng của bạn trống trơn!</h4>
+            <p class="text-muted mb-4">Hãy thêm những thực phẩm sạch, tươi ngon vào giỏ hàng của bạn để chuẩn bị những bữa ăn bổ dưỡng nhé.</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-hero">
+                <i class="fa-solid fa-arrow-left me-2"></i>Mua sắm ngay
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <!-- Bảng Danh Sách Sản Phẩm -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-4">
+                    <div class="card-header bg-white border-0 py-3">
+                        <h5 class="m-0 fw-semibold text-success"><i class="fa-solid fa-list me-2"></i>Chi tiết sản phẩm</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light text-secondary">
+                                <tr>
+                                    <th scope="col" class="ps-4" style="width: 100px;">Hình ảnh</th>
+                                    <th scope="col">Sản phẩm</th>
+                                    <th scope="col" class="text-center" style="width: 120px;">Số lượng</th>
+                                    <th scope="col" class="text-end" style="width: 130px;">Đơn giá</th>
+                                    <th scope="col" class="text-end" style="width: 140px;">Thành tiền</th>
+                                    <th scope="col" class="text-center" style="width: 80px;">Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="rounded-3 overflow-hidden border border-light shadow-sm" style="width: 60px; height: 60px;">
+                                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://images.unsplash.com/photo-1610348725531-843dff14f9da?w=200&auto=format&fit=crop&q=60" : item.ImageUrl)" 
+                                                     alt="@item.Name" 
+                                                     class="w-100 h-100" 
+                                                     style="object-fit: cover;" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <h6 class="mb-0 fw-semibold text-dark">@item.Name</h6>
+                                            <small class="text-muted">Mã SP: #@item.ProductId</small>
+                                        </td>
+                                        <td class="text-center">
+                                            <!-- Hiển thị số lượng với viền mềm mại -->
+                                            <span class="badge bg-light text-dark border px-3 py-2 fs-6">@item.Quantity</span>
+                                        </td>
+                                        <td class="text-end fw-semibold text-secondary">
+                                            @item.Price.ToString("N0") đ
+                                        </td>
+                                        <td class="text-end fw-bold text-success">
+                                            @item.TotalPrice.ToString("N0") đ
+                                        </td>
+                                        <td class="text-center">
+                                            <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" 
+                                               class="btn btn-outline-danger btn-sm rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                               style="width: 32px; height: 32px;"
+                                               title="Xóa khỏi giỏ"
+                                               onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <a asp-controller="Product" asp-action="Index" class="btn btn-outline-success rounded-pill px-4 py-2 fw-semibold">
+                        <i class="fa-solid fa-arrow-left me-2"></i>Tiếp tục mua hàng
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tóm Tắt Đơn Hàng & Nút Thanh Toán -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 bg-white p-4">
+                    <h5 class="fw-semibold text-success mb-4 pb-2 border-bottom"><i class="fa-solid fa-receipt me-2"></i>Tóm tắt giỏ hàng</h5>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">Tổng số lượng</span>
+                        <span class="fw-semibold text-dark">@Model.Items.Sum(i => i.Quantity) sản phẩm</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="text-secondary">Tạm tính</span>
+                        <span class="fw-semibold text-dark">@Model.GetTotal().ToString("N0") đ</span>
+                    </div>
+
+                    <hr class="my-3 text-muted">
+
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="fs-5 fw-bold text-dark">Tổng tiền</span>
+                        <span class="fs-4 fw-extrabold text-danger">@Model.GetTotal().ToString("N0") đ</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="p-3 bg-light rounded-3 mb-4 border border-light">
+                            <small class="text-muted d-block mb-1"><i class="fa-solid fa-truck-fast text-success me-1"></i> Giao hàng siêu tốc</small>
+                            <small class="text-muted">Cam kết thực phẩm tươi ngon 100% khi giao đến tay khách hàng.</small>
+                        </div>
+                    </div>
+
+                    <a asp-action="Checkout" class="btn btn-hero w-100 py-3 fs-5 rounded-pill shadow d-flex align-items-center justify-content-center gap-2">
+                        <span>Tới trang thanh toán</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

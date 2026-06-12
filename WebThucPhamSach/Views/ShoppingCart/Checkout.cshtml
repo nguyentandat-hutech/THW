@@ -1,0 +1,129 @@
+@model webthucphamsach.Models.Order
+
+@{
+    ViewData["Title"] = "Thanh Toán";
+    var cart = ViewBag.Cart as webthucphamsach.Models.ShoppingCart;
+}
+
+<div class="container my-5 animate-fade-in">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index" class="text-success"><i class="fa-solid fa-house"></i> Trang chủ</a></li>
+            <li class="breadcrumb-item"><a asp-controller="ShoppingCart" asp-action="Index" class="text-success">Giỏ hàng</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col-12">
+            <h2 class="section-title"><i class="fa-solid fa-credit-card me-2"></i>Thanh toán đơn hàng</h2>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Cột Trái: Thông Tin Giao Hàng -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                <h5 class="fw-semibold text-success mb-4 pb-2 border-bottom">
+                    <i class="fa-solid fa-truck-ramp-box me-2"></i>Thông tin nhận hàng
+                </h5>
+
+                <form asp-action="Checkout" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Địa Chỉ Nhận Hàng -->
+                    <div class="mb-4">
+                        <label asp-for="ShippingAddress" class="form-label fw-semibold text-dark">Địa chỉ giao hàng <span class="text-danger">*</span></label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0 text-success"><i class="fa-solid fa-location-dot"></i></span>
+                            <input asp-for="ShippingAddress" class="form-control bg-light border-start-0 py-3" placeholder="Nhập địa chỉ nhà, tên đường, quận/huyện, thành phố..." />
+                        </div>
+                        <span asp-validation-for="ShippingAddress" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Ghi Chú Đơn Hàng -->
+                    <div class="mb-4">
+                        <label asp-for="Notes" class="form-label fw-semibold text-dark">Ghi chú giao hàng</label>
+                        <textarea asp-for="Notes" class="form-control bg-light py-3" rows="4" placeholder="Ví dụ: Giao hàng vào giờ hành chính, gọi điện trước khi giao, hoặc chỉ dẫn đường đi..."></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small mt-1 d-block"></span>
+                    </div>
+
+                    <!-- Đảm Bảo & Cam Kết Bảo Mật -->
+                    <div class="p-3 bg-light rounded-3 mb-4 text-secondary border border-light">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="fa-solid fa-shield-halved text-success me-2 fs-5"></i>
+                            <h6 class="m-0 fw-semibold text-dark">Phương thức thanh toán</h6>
+                        </div>
+                        <p class="small mb-0">Hiện tại, hệ thống hỗ trợ phương thức <strong>Thanh toán khi nhận hàng (COD)</strong>. Quý khách được kiểm tra thực phẩm sạch trước khi thanh toán.</p>
+                    </div>
+
+                    <!-- Nút Xác Nhận -->
+                    <button type="submit" class="btn btn-hero w-100 py-3 fs-5 rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Xác nhận đặt hàng</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Cột Phải: Tóm Tắt Đơn Hàng -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 90px; z-index: 5;">
+                <h5 class="fw-semibold text-success mb-4 pb-2 border-bottom">
+                    <i class="fa-solid fa-receipt me-2"></i>Đơn hàng của bạn
+                </h5>
+
+                @if (cart != null && cart.Items.Count > 0)
+                {
+                    <div class="overflow-auto mb-4" style="max-height: 280px;">
+                        @foreach (var item in cart.Items)
+                        {
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="rounded-3 overflow-hidden border border-light shadow-sm me-3" style="width: 50px; height: 50px; flex-shrink: 0;">
+                                    <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://images.unsplash.com/photo-1610348725531-843dff14f9da?w=200&auto=format&fit=crop&q=60" : item.ImageUrl)" 
+                                         alt="@item.Name" 
+                                         class="w-100 h-100" 
+                                         style="object-fit: cover;" />
+                                </div>
+                                <div class="flex-grow-1 min-w-0">
+                                    <h6 class="mb-0 fw-semibold text-dark text-truncate">@item.Name</h6>
+                                    <small class="text-muted">SL: @item.Quantity x @item.Price.ToString("N0") đ</small>
+                                </div>
+                                <div class="text-end fw-bold text-success ms-3" style="flex-shrink: 0;">
+                                    @item.TotalPrice.ToString("N0") đ
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <hr class="my-3 text-muted">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">Tạm tính</span>
+                        <span class="fw-semibold text-dark">@cart.GetTotal().ToString("N0") đ</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">Phí vận chuyển</span>
+                        <span class="fw-semibold text-success">Miễn phí (FREESHIP)</span>
+                    </div>
+
+                    <hr class="my-3 text-muted">
+
+                    <div class="d-flex justify-content-between align-items-center mb-0">
+                        <span class="fs-5 fw-bold text-dark">Tổng cộng</span>
+                        <span class="fs-4 fw-extrabold text-danger">@cart.GetTotal().ToString("N0") đ</span>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center py-4">Không có sản phẩm nào để hiển thị.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Thêm thư viện validation cho client-side validation hoạt động mượt mà -->
+    <partial name="_ValidationScriptsPartial" />
+}

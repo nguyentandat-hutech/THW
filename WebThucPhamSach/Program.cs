@@ -13,6 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Thêm dịch vụ Controllers với Views
 builder.Services.AddControllersWithViews();
 
+// Đăng ký dịch vụ Cache và Session
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 // Đăng ký CSDL SQL Server với DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -63,6 +72,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseSession();
 app.UseRouting();
 
 // QUAN TRỌNG: UseAuthentication phải đặt TRƯỚC UseAuthorization
